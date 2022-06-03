@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { ColumnType, TaskType, CommentType } from "types/types";
-import { StyledInput } from "ui/StyledInput";
+import { Form } from "ui/Form/Form";
 import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
@@ -54,16 +54,12 @@ export const Comments: React.FC<CommentsProps> = ({
               <Title>{author}</Title>
               <CommentText>{comment.comment}</CommentText>
               {isCommentEditeble && comment.ID === activeComment?.ID && (
-                <div>
-                  <input
-                    defaultValue={comment.comment}
-                    placeholder={comment.comment}
-                    onChange={(e) => setEditedCommentText(e.target.value)}
-                  ></input>
-                  <button onClick={() => saveEditedComment(comment.ID)}>
-                    save
-                  </button>
-                </div>
+                <Form 
+                  onHandleClick={() => saveEditedComment(comment.ID)} 
+                  placeholder="de a comment"
+                  value={comment.comment}
+                  onChange={(e) => setEditedCommentText(e.target.value)}
+                />
               )}
             </TextBlock>
             <div>
@@ -83,12 +79,13 @@ export const Comments: React.FC<CommentsProps> = ({
           </StyledComment>
         );
       })}
-      <StyledInput
-        onChange={changeComment}
+      <Form 
+        onHandleClick={inputComment} 
         placeholder="Add a comment"
         value={commentText}
-      />
-      <OkButton onClick={inputComment}>OK</OkButton>
+        onChange={changeComment}
+        >
+      </Form>
     </>
   );
 };

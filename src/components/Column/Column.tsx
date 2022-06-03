@@ -6,6 +6,7 @@ import { StyledInput } from "ui/StyledInput";
 import { FlexContainer } from "ui/FlexContainer";
 import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
+import { Form } from 'ui/Form'
 
 interface ColumnProps {
   columnData: ColumnType;
@@ -71,13 +72,12 @@ export const Column: React.FC<ColumnProps> = ({
           ></Button>
         </FlexContainer>
         {isColumnEditeble && (
-          <div>
-            <StyledInput
-              onChange={changeColumnName}
-              defaultValue={columnData.columnTitle}
-            ></StyledInput>
-            <button onClick={submitColumnName}>Save</button>
-          </div>
+          <Form
+            onHandleClick={submitColumnName} 
+            placeholder="Enter Column Name"
+            value={columnData.columnTitle}
+            onChange={changeColumnName}
+          />          
         )}
       </div>
       <Cards

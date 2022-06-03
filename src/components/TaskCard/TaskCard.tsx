@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { ColumnType, TaskType, CommentType } from "types/types";
 import { Comments } from "components/Comments";
 import { Modal } from "components/Modal/Modal";
-import { StyledInput } from "ui/StyledInput";
 import { FlexContainer } from "ui/FlexContainer";
 import { Button } from 'ui/Button/Button'
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
 import closeIcon from "images/closeIcon.svg";
 import commentsIcon from "images/commentsIcon.png";
+import { Form } from 'ui/Form/Form'
 
 interface TaskPopupProps {
   author: string;
@@ -96,21 +96,15 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
           <FlexContainer>
             <NarrowFlexibleContainer>
               {isTaskTitleEditible ? (
-                <div>
-                  <StyledInput
-                    placeholder="Enter new name"
-                    defaultValue={task.taskTitle}
-                    onChange={(e) => setNewTaskName(e.target.value)}
-                  ></StyledInput>
-                  <button
-                    onClick={() => {
-                      renameTask(newTaskName, task.ID);
-                      setIsTaskTitleEditible(false);
-                    }}
-                  >
-                    Save
-                  </button>
-                </div>
+                <Form
+                  onHandleClick={() => {
+                    renameTask(newTaskName, task.ID);
+                    setIsTaskTitleEditible(false)}}
+                  placeholder="Enter Task Name..."
+                  value={task.taskTitle}
+                  onChange={(e) => setNewTaskName(e.target.value)}
+                >
+                </Form>
               ) : (
                 <PopupTitle>{task.taskTitle}</PopupTitle>
               )}
@@ -144,21 +138,15 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
               </NarrowFlexibleContainer>
               <DescText>{task.description}</DescText>
               {isDescriptionEditible && (
-                <div>
-                  <StyledInput
-                    placeholder="Add more detailed description..."
-                    onChange={changeDescription}
-                    defaultValue={task.description}
-                  ></StyledInput>
-                  <button
-                    onClick={() => {
-                      saveDescription(description, task.ID);
-                      setIsDescriptionEditible(false);
-                    }}
-                  >
-                    Save
-                  </button>
-                </div>
+                <Form
+                  onHandleClick={() => {
+                    saveDescription(description, task.ID);
+                    setIsDescriptionEditible(false);
+                  }}
+                  placeholder="Enter Description..."
+                  value={task.description}
+                  onChange={changeDescription}
+                />              
               )}
             </DescWrapper>
             <Comments
