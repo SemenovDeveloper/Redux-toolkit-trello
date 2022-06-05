@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Modal } from "components/Modal/Modal";
 import { ColumnType, TaskType, CommentType } from "types/types";
 import { StyledInput } from "ui/StyledInput";
+import { useSelector } from "react-redux";
 
 const initialBoard = [
   { columnTitle: "TODO", ID: "d1865587-25e9-4e5e-aba1-11b9c8972b39" },
