@@ -1,6 +1,16 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { authorNamaReducer } from 'store/author/authorReducers'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { columnReducer } from './Column/columnReducers'
 
-export const store = configureStore({
-  reducer: {author: authorNamaReducer}
+const rootReducer = combineReducers({
+	columnReducer
 })
+
+export const setupStore = () => {
+	return configureStore({
+		reducer: rootReducer
+	})
+}
+
+export type RootState = ReturnType<typeof rootReducer>
+export type AppStore = ReturnType<typeof setupStore>
+export type AppDispatch = AppStore['dispatch']

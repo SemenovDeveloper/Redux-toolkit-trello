@@ -7,13 +7,17 @@ import { FlexContainer } from "ui/FlexContainer";
 import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
 import { Form } from 'ui/Form'
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { deleteColumn } from "store/Column/columnReducers";
+import { renameColumn} from 'store/Column/columnReducers'
 
 interface ColumnProps {
+  columnID: string
   columnData: ColumnType;
   author: string;
   tasks: TaskType[];
   comments: CommentType[];
-  renameColumn: (newName: string, columnID: string) => void;
+  // renameColumn: (newName: string, columnID: string) => void;
   addTask: (taskTitle: string, columnID: string) => void;
   addComment: (comment: string, taskID: string) => void;
   deleteComment: (commentID: string) => void;
@@ -24,6 +28,7 @@ interface ColumnProps {
 }
 
 export const Column: React.FC<ColumnProps> = ({
+  columnID,
   columnData,
   author,
   tasks,
@@ -34,12 +39,14 @@ export const Column: React.FC<ColumnProps> = ({
   deleteComment,
   editComment,
   deleteTask,
-  renameTask,
-  renameColumn,
+  renameTask
 }) => {
   const [taskTitle, setTaskTitle] = useState("");
   const [isColumnEditeble, setIsColumnEditeble] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>("");
+
+  const {} = useAppSelector(state => state.columnReducer)
+  const dispatch = useAppDispatch();
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(event.target.value);
@@ -56,10 +63,17 @@ export const Column: React.FC<ColumnProps> = ({
     setColumnName(event.target.value);
   };
 
-  const submitColumnName = () => {
-    renameColumn(columnName, columnData.ID);
+  //////////////////////////////////////////////////////////////////////////
+
+  const submitColumnName = (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(renameColumn({ID: columnID, columnTitle: columnName}))
     setIsColumnEditeble(false);
   };
+
+  const deleteColumnHandler = (columnID: string) => {
+    dispatch(deleteColumn(columnID))
+  }
 
   return (
     <StyledContainer>
@@ -72,13 +86,23 @@ export const Column: React.FC<ColumnProps> = ({
           ></Button>
         </FlexContainer>
         {isColumnEditeble && (
-          <Form
-            onHandleClick={submitColumnName} 
-            placeholder="Enter Column Name"
-            value={columnData.columnTitle}
-            onChange={changeColumnName}
-          />          
+          <form onSubmit={submitColumnName}>
+            <input 
+              type="text" 
+              name='column-title'
+              onChange={changeColumnName}
+              defaultValue={columnData.columnTitle}
+            />
+            <button type="submit">save</button>
+          </form>
+          // <Form
+          //   onHandleClick={submitColumnName} 
+            // placeholder="Enter Column Name"
+            // value={columnData.columnTitle}
+            // onChange={changeColumnName}
+          // />
         )}
+        <button onClick={() => deleteColumnHandler(columnID)}>del</button> 
       </div>
       <Cards
         columnData={columnData}

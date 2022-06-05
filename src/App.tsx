@@ -5,20 +5,11 @@ import styled from "styled-components";
 import { Modal } from "components/Modal/Modal";
 import { ColumnType, TaskType, CommentType } from "types/types";
 import { StyledInput } from "ui/StyledInput";
-import { useSelector } from "react-redux";
-
-const initialBoard = [
-  { columnTitle: "TODO", ID: "d1865587-25e9-4e5e-aba1-11b9c8972b39" },
-  { columnTitle: "In Progress", ID: "3218877d-e1f9-44f0-8872-ee2a440777b4" },
-  { columnTitle: "Testing", ID: "95891ca7-f3c7-4070-a0cf-3c9aaa9f4c85" },
-  { columnTitle: "Done", ID: "c4dce2ab-68f4-4fb5-8a65-1d0a18982711" },
-];
+import { useAppSelector } from 'hooks/redux';
 
 function App() {
-  const [board, setBoard] = useLocalStorage<ColumnType[]>(
-    "columns",
-    initialBoard
-  );
+  const columns = useAppSelector(state => state.columnReducer)
+
   const [author, setAuthor] = useLocalStorage("name", "user");
   const [tasks, setTasks] = useLocalStorage<TaskType[]>("tasks", []);
   const [comments, setComments] = useLocalStorage<CommentType[]>(
@@ -37,13 +28,13 @@ function App() {
     }
   };
 
-  const renameColumn = (newName: string, columnID: string) => {
-    setBoard((perv) =>
-      perv.map((column) =>
-        column.ID === columnID ? { ...column, columnTitle: newName } : column
-      )
-    );
-  };
+  // const renameColumn = (newName: string, columnID: string) => {
+  //   setBoard((perv) =>
+  //     perv.map((column) =>
+  //       column.ID === columnID ? { ...column, columnTitle: newName } : column
+  //     )
+  //   );
+  // };
 
   const addTask = (taskTitle: string, columnID: string) => {
     let taskID: string = Date.now().toString();
@@ -112,14 +103,15 @@ function App() {
     <AppWrapper>
       <StyledH1>Hello, {author}</StyledH1>
       <Board>
-        {board.map((column) => (
+        {columns.map((column) => (
           <Column
             key={column.ID}
             author={author}
             columnData={column}
+            columnID={column.ID}
             tasks={tasks}
             comments={comments}
-            renameColumn={renameColumn}
+            // renameColumn={renameColumn}
             addTask={addTask}
             renameTask={renameTask}
             deleteTask={deleteTask}
