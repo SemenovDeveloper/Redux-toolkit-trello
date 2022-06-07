@@ -29,10 +29,7 @@ export const Cards: React.FC<CardProps> = ({
   renameTask,
 }) => {
   const tasksList = useAppSelector(state => state.taskReducer)
-  const filteredTasks = useMemo(
-    () => tasksList.filter((task) => task.columnID === columnData.ID),
-    [columnData.ID, tasks]
-  );
+  const filteredTasks = tasksList.filter((task) => task.columnID === columnData.ID)
 
   return (
     <div>
@@ -48,7 +45,7 @@ export const Cards: React.FC<CardProps> = ({
             editDescription={editDescription}
             deleteComment={deleteComment}
             editComment={editComment}
-            deleteTask={deleteTask}
+            // deleteTask={deleteTask}
             // renameTask={renameTask}
           />
         );

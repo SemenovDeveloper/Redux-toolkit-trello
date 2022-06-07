@@ -112,7 +112,7 @@ function App() {
             tasks={tasks}
             comments={comments}
             // renameColumn={renameColumn}
-            addTask={addTask}
+            // addTask={addTask}
             renameTask={renameTask}
             deleteTask={deleteTask}
             addComment={addComment}

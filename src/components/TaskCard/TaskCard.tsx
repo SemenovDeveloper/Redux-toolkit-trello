@@ -10,7 +10,7 @@ import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
 import closeIcon from "images/closeIcon.svg";
 import commentsIcon from "images/commentsIcon.png";
-import { renameTask, deleteTask } from 'store/ducks/card/cardActions';
+import { renameTask, deleteTask, editDescription, deleteDescription } from 'store/ducks/card/cardActions';
 import { useAppDispatch, useAppSelector } from 'hooks/redux'
 
 
@@ -23,7 +23,7 @@ interface TaskPopupProps {
   editDescription: (description: string, taskID: string) => void;
   deleteComment: (commentID: string) => void;
   editComment: (commentID: string, commentText: string) => void;
-  deleteTask: (taskID: string) => void;
+  // deleteTask: (taskID: string) => void;
   // renameTask: (newTitle: string, taskID: string) => void;
 }
 
@@ -32,14 +32,16 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
   columnData,
   author,
   comments,
-  editDescription,
+  // editDescription,
   addComment,
   deleteComment,
   editComment,
-  deleteTask,
+  // deleteTask,
   // renameTask,
 }) => {
-  const dispatch = useAppDispatch();  
+  const dispatch = useAppDispatch();
+  const tasks = useAppSelector(state => state.taskReducer);
+  // const activeTask: TaskType = tasks.find(x => x.ID === task.ID);
 
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
@@ -71,13 +73,9 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
     setDescription(event.target.value);
   };
 
-  const saveDescription = (description: string, taskID: string) => {
-    editDescription(description, taskID);
-  };
-
-  const renameTask = (e: React.FormEvent) => {
+  const submitTaskName = (e: React.FormEvent) => {
     e.preventDefault();
-    // dispatch(renameTask());
+    dispatch(renameTask({ID: task.ID, newTitle: newTaskName}))
     setIsTaskTitleEditible(false);
   }
 
@@ -93,7 +91,7 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
             ></Button>
             <Button
               img={deleteIcon}
-              onClick={() => deleteTask(task.ID)}
+              onClick={() => dispatch(deleteTask(task.ID))}
             ></Button>
           </FlexContainer>
         </FlexContainer>
@@ -107,24 +105,12 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
           <FlexContainer>
             <NarrowFlexibleContainer>
               {isTaskTitleEditible ? (
-                <form onSubmit={renameTask}>
-                  <input 
-                    type="text" 
-                    name='tasktitle'
-                    onChange={(e) => setNewTaskName(e.target.value)}
-                    value={task.taskTitle}
-                  />
-                  <button type="submit">save</button>
-                </form>
-                // <Form
-                //   onHandleClick={() => {
-                //     renameTask(newTaskName, task.ID);
-                //     setIsTaskTitleEditible(false)}}
-                //   placeholder="Enter Task Name..."
-                //   value={task.taskTitle}
-                //   onChange={(e) => setNewTaskName(e.target.value)}
-                // >
-                // </Form>
+                <Form
+                onHandleClick={submitTaskName} 
+                placeholder="Enter Column Name"
+                value={task.taskTitle}
+                onChange={(e) => setNewTaskName(e.target.value)}
+              />            
               ) : (
                 <PopupTitle>{task.taskTitle}</PopupTitle>
               )}
@@ -152,7 +138,7 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
                   />
                   <Button
                     img={deleteIcon}
-                    onClick={() => saveDescription("", task.ID)}
+                    onClick={() => dispatch(deleteDescription(task.ID))}
                   />
                 </div>
               </NarrowFlexibleContainer>
@@ -160,7 +146,8 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
               {isDescriptionEditible && (
                 <Form
                   onHandleClick={() => {
-                    saveDescription(description, task.ID);
+                    dispatch(editDescription({ID: task.ID,
+                      desription: description}))
                     setIsDescriptionEditible(false);
                   }}
                   placeholder="Enter Description..."

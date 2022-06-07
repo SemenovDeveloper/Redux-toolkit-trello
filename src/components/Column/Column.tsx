@@ -10,6 +10,7 @@ import { Form } from 'ui/Form'
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { deleteColumn } from "store/Column/columnReducers";
 import { renameColumn} from 'store/Column/columnReducers'
+import { addTask } from 'store/ducks/card/cardActions'
 
 interface ColumnProps {
   columnID: string
@@ -18,7 +19,7 @@ interface ColumnProps {
   tasks: TaskType[];
   comments: CommentType[];
   // renameColumn: (newName: string, columnID: string) => void;
-  addTask: (taskTitle: string, columnID: string) => void;
+  // addTask: (taskTitle: string, columnID: string) => void;
   addComment: (comment: string, taskID: string) => void;
   deleteComment: (commentID: string) => void;
   editDescription: (description: string, taskID: string) => void;
@@ -33,7 +34,7 @@ export const Column: React.FC<ColumnProps> = ({
   author,
   tasks,
   comments,
-  addTask,
+  // addTask,
   editDescription,
   addComment,
   deleteComment,
@@ -54,7 +55,14 @@ export const Column: React.FC<ColumnProps> = ({
 
   const keyPressHandler = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && taskTitle !== "") {
-      addTask(taskTitle, columnData.ID);
+      let taskID: string = Date.now().toString();
+      const newTask = {
+        taskTitle: taskTitle,
+        ID: taskID,
+        columnID: columnID,
+        description: "",
+      };
+      dispatch(addTask(newTask))
       setTaskTitle("");
     }
   };
