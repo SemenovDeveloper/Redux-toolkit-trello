@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { useLocalStorage } from "hooks";
 import { Column } from "components/Column";
 import styled from "styled-components";
 import { Modal } from "components/Modal/Modal";
-import { ColumnType, TaskType, CommentType } from "types/types";
 import { StyledInput } from "ui/StyledInput";
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { inputAuthor } from 'store/ducks/author/authorActions'
@@ -12,87 +10,14 @@ function App() {
   const dispatch = useAppDispatch()
   const columns = useAppSelector(state => state.columnReducer)
   const author = useAppSelector(state => state.authorReducer)
-
   const [authorName, setAuthorName] = useState("");
-  const [tasks, setTasks] = useLocalStorage<TaskType[]>("tasks", []);
-  const [comments, setComments] = useLocalStorage<CommentType[]>(
-    "comments",
-    []
-  );
   const [modalActive, setModalActive] = useState<boolean>(author === "user");
-
-  const changeAuthor = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAuthorName(event.target.value);
-  };
 
   const submitAuthor = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && authorName !== "") {
       dispatch(inputAuthor(authorName))
       setModalActive(false);
     }
-  };
-
-  const addTask = (taskTitle: string, columnID: string) => {
-    let taskID: string = Date.now().toString();
-    if (taskTitle !== "") {
-      const tasksClone = [...tasks];
-      const newTask = {
-        taskTitle: taskTitle,
-        ID: taskID,
-        columnID: columnID,
-        description: "",
-      };
-      tasksClone.push(newTask);
-      setTasks(tasksClone);
-    }
-  };
-
-  const deleteTask = (taskID: string) => {
-    setTasks((perv) => perv.filter((task) => taskID !== task.ID));
-  };
-
-  const renameTask = (newTitle: string, taskID: string) => {
-    setTasks((perv) =>
-      perv.map((task) =>
-        task.ID === taskID ? { ...task, taskTitle: newTitle } : task
-      )
-    );
-  };
-
-  const editDescription = (description: string, taskID: string) => {
-    const tasksClone = tasks.map((task) =>
-      task.ID === taskID ? { ...task, description: description } : task
-    );
-    setTasks(tasksClone);
-  };
-
-  const addComment = (comment: string, taskID: string) => {
-    if (comment !== "") {
-      const commentsClone = [...comments];
-      const commentID = Date.now().toString();
-      const newComment = {
-        taskID: taskID,
-        comment: comment,
-        ID: commentID,
-      };
-      commentsClone.push(newComment);
-      setComments(commentsClone);
-    }
-  };
-
-  const editComment = (commentID: string, commentText: string) => {
-    if (commentText !== "") {
-      const commentsClone = comments.map((comment) =>
-        comment.ID === commentID
-          ? { ...comment, comment: commentText }
-          : comment
-      );
-      setComments(commentsClone);
-    }
-  };
-
-  const deleteComment = (commentID: string) => {
-    setComments((perv) => perv.filter((comment) => comment.ID !== commentID));
   };
 
   return (
@@ -102,17 +27,7 @@ function App() {
         {columns.map((column) => (
           <Column
             key={column.ID}
-            author={author}
             columnData={column}
-            columnID={column.ID}
-            tasks={tasks}
-            comments={comments}
-            renameTask={renameTask}
-            deleteTask={deleteTask}
-            addComment={addComment}
-            editComment={editComment}
-            deleteComment={deleteComment}
-            editDescription={editDescription}
           />
         ))}
       </Board>

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
-import { ColumnType, TaskType, CommentType } from "types/types";
+import { TaskType } from "types/types";
 import { Comments } from "components/Comments";
 import { Modal } from "components/Modal/Modal";
 import { FlexContainer } from "ui/FlexContainer";
@@ -15,34 +15,25 @@ import { useAppDispatch, useAppSelector } from 'hooks/redux'
 
 
 interface TaskPopupProps {
-  author: string;
   task: TaskType;
-  columnData: ColumnType;
-  comments: CommentType[];
-  addComment: (comment: string, taskID: string) => void;
-  editDescription: (description: string, taskID: string) => void;
-  deleteComment: (commentID: string) => void;
-  editComment: (commentID: string, commentText: string) => void;
-  // deleteTask: (taskID: string) => void;
-  // renameTask: (newTitle: string, taskID: string) => void;
 }
 
 export const TaskCard: React.FC<TaskPopupProps> = ({
-  task,
-  columnData,
+  task
 }) => {
 
   const dispatch = useAppDispatch();
-  const tasks = useAppSelector(state => state.taskReducer); 
   const comments = useAppSelector(state => state.commentReducer);
-  const author = useAppSelector(state => state.authorReducer)
+  const author = useAppSelector(state => state.authorReducer);
+  const columns = useAppSelector(state => state.columnReducer);
+  const columnTitle =  columns.find(column => column.ID === task.columnID)?.columnTitle 
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
     useState<boolean>(false);
   const [description, setDescription] = useState("");
   const [isTaskTitleEditible, setIsTaskTitleEditible] =
     useState<boolean>(false);
-  const [newTaskName, setNewTaskName] = useState<string>("");
+  const [newTaskTitle, setNewTaskTitle] = useState<string>("");
 
   const filteredComments = useMemo(
     () => comments.filter((comment) => task.ID === comment.taskID),
@@ -68,7 +59,7 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
 
   const submitTaskName = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(renameTask({ID: task.ID, newTitle: newTaskName}))
+    dispatch(renameTask({ID: task.ID, newTitle: newTaskTitle}))
     setIsTaskTitleEditible(false);
   }
 
@@ -102,7 +93,7 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
                 onHandleClick={submitTaskName} 
                 placeholder="Enter Column Name"
                 value={task.taskTitle}
-                onChange={(e) => setNewTaskName(e.target.value)}
+                onChange={(e) => setNewTaskTitle(e.target.value)}
               />            
               ) : (
                 <PopupTitle>{task.taskTitle}</PopupTitle>
@@ -115,7 +106,7 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
             <CloseButton onClick={() => setActivePopup(false)}></CloseButton>
           </FlexContainer>
           <StyledText>
-            in list <BoldText>{columnData.columnTitle}</BoldText> by{" "}
+            in list <BoldText>{columnTitle}</BoldText> by{" "}
             <BoldText>{author}</BoldText>
           </StyledText>
           <div>

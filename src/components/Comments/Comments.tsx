@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { ColumnType, TaskType, CommentType } from "types/types";
+import { TaskType, CommentType } from "types/types";
 import { Form } from "ui/Form/Form";
 import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
@@ -40,9 +40,9 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
         comment: newCommentText,
         taskID: task.ID,
       };
-      dispatch(addComment(newComment));    
+      dispatch(addComment(newComment));
       setNewCommentText("");
-    }    
+    }
   };
 
   const saveEditedComment = (commentID: string) => {
@@ -88,7 +88,7 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
       <Form
         onHandleClick={inputComment}
         placeholder="Add a comment"
-        value={''}
+        value={""}
         onChange={changeComment}
       ></Form>
     </>
