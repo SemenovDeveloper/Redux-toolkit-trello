@@ -5,11 +5,14 @@ import { Comments } from "components/Comments";
 import { Modal } from "components/Modal/Modal";
 import { FlexContainer } from "ui/FlexContainer";
 import { Button } from 'ui/Button/Button'
+import { Form } from 'ui/Form/Form';
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
 import closeIcon from "images/closeIcon.svg";
 import commentsIcon from "images/commentsIcon.png";
-import { Form } from 'ui/Form/Form'
+import { renameTask, deleteTask } from 'store/ducks/card/cardActions';
+import { useAppDispatch, useAppSelector } from 'hooks/redux'
+
 
 interface TaskPopupProps {
   author: string;
@@ -21,7 +24,7 @@ interface TaskPopupProps {
   deleteComment: (commentID: string) => void;
   editComment: (commentID: string, commentText: string) => void;
   deleteTask: (taskID: string) => void;
-  renameTask: (newTitle: string, taskID: string) => void;
+  // renameTask: (newTitle: string, taskID: string) => void;
 }
 
 export const TaskCard: React.FC<TaskPopupProps> = ({
@@ -34,8 +37,10 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
   deleteComment,
   editComment,
   deleteTask,
-  renameTask,
+  // renameTask,
 }) => {
+  const dispatch = useAppDispatch();  
+
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
     useState<boolean>(false);
@@ -70,6 +75,12 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
     editDescription(description, taskID);
   };
 
+  const renameTask = (e: React.FormEvent) => {
+    e.preventDefault();
+    // dispatch(renameTask());
+    setIsTaskTitleEditible(false);
+  }
+
   return (
     <>
       <StyledTaskCard>
@@ -96,15 +107,24 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
           <FlexContainer>
             <NarrowFlexibleContainer>
               {isTaskTitleEditible ? (
-                <Form
-                  onHandleClick={() => {
-                    renameTask(newTaskName, task.ID);
-                    setIsTaskTitleEditible(false)}}
-                  placeholder="Enter Task Name..."
-                  value={task.taskTitle}
-                  onChange={(e) => setNewTaskName(e.target.value)}
-                >
-                </Form>
+                <form onSubmit={renameTask}>
+                  <input 
+                    type="text" 
+                    name='tasktitle'
+                    onChange={(e) => setNewTaskName(e.target.value)}
+                    value={task.taskTitle}
+                  />
+                  <button type="submit">save</button>
+                </form>
+                // <Form
+                //   onHandleClick={() => {
+                //     renameTask(newTaskName, task.ID);
+                //     setIsTaskTitleEditible(false)}}
+                //   placeholder="Enter Task Name..."
+                //   value={task.taskTitle}
+                //   onChange={(e) => setNewTaskName(e.target.value)}
+                // >
+                // </Form>
               ) : (
                 <PopupTitle>{task.taskTitle}</PopupTitle>
               )}

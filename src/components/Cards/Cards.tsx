@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { TaskCard } from "components/TaskCard";
 import { ColumnType, TaskType, CommentType } from "types/types";
+import { useAppSelector } from 'hooks/redux'
 
 interface CardProps {
   columnData: ColumnType;
@@ -27,8 +28,9 @@ export const Cards: React.FC<CardProps> = ({
   deleteTask,
   renameTask,
 }) => {
+  const tasksList = useAppSelector(state => state.taskReducer)
   const filteredTasks = useMemo(
-    () => tasks.filter((task) => task.columnID === columnData.ID),
+    () => tasksList.filter((task) => task.columnID === columnData.ID),
     [columnData.ID, tasks]
   );
 
@@ -47,7 +49,7 @@ export const Cards: React.FC<CardProps> = ({
             deleteComment={deleteComment}
             editComment={editComment}
             deleteTask={deleteTask}
-            renameTask={renameTask}
+            // renameTask={renameTask}
           />
         );
       })}

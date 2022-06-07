@@ -4,7 +4,7 @@ import { StyledInput } from "ui/StyledInput";
 
 interface FormProps {
   children?: React.ReactNode;
-  onHandleClick: () => void
+  onHandleClick: (e: React.FormEvent) => void
   placeholder:string
   value: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -18,7 +18,7 @@ export const Form : React.FC<FormProps> = ({ onHandleClick, placeholder, value, 
 
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onHandleClick();
+    onHandleClick(event);
    }
 
   return (

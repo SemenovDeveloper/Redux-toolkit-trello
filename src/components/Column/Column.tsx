@@ -45,7 +45,7 @@ export const Column: React.FC<ColumnProps> = ({
   const [isColumnEditeble, setIsColumnEditeble] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>("");
 
-  const {} = useAppSelector(state => state.columnReducer)
+  // const {} = useAppSelector(state => state.columnReducer)
   const dispatch = useAppDispatch();
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,21 +86,21 @@ export const Column: React.FC<ColumnProps> = ({
           ></Button>
         </FlexContainer>
         {isColumnEditeble && (
-          <form onSubmit={submitColumnName}>
-            <input 
-              type="text" 
-              name='column-title'
-              onChange={changeColumnName}
-              defaultValue={columnData.columnTitle}
-            />
-            <button type="submit">save</button>
-          </form>
-          // <Form
-          //   onHandleClick={submitColumnName} 
-            // placeholder="Enter Column Name"
-            // value={columnData.columnTitle}
-            // onChange={changeColumnName}
-          // />
+          // <form onSubmit={submitColumnName}>
+          //   <input 
+          //     type="text" 
+          //     name='column-title'
+          //     onChange={changeColumnName}
+          //     defaultValue={columnData.columnTitle}
+          //   />
+          //   <button type="submit">save</button>
+          // </form>
+          <Form
+            onHandleClick={submitColumnName} 
+            placeholder="Enter Column Name"
+            value={columnData.columnTitle}
+            onChange={changeColumnName}
+          />
         )}
         <button onClick={() => deleteColumnHandler(columnID)}>del</button> 
       </div>

@@ -16,15 +16,16 @@ export const deleteColumn = createAction<string>('deleteColumn');
 export const columnReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(renameColumn, (state, action) => {
-      state.map(column => {
-          if (column.ID === action.payload.ID) {
-            return { ...column, ...action.payload }
-          }
-          return state
+      return state.map(column => {
+        if(column.ID === action.payload.ID) {
+          return { ...column, ...action.payload }
+        } else {
+          return column
+        }
       })
   })
     .addCase(deleteColumn, (state, action) => {
-      state.filter(column => column.ID !== action.payload)
+      return state.filter(column => column.ID !== action.payload)
     })
 }
 )
