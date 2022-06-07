@@ -5,6 +5,8 @@ import { Form } from "ui/Form/Form";
 import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { addComment, deleteComment, editComment } from 'store/ducks/comment/commentActions'
 
 interface CommentsProps {
   author: string;
@@ -19,12 +21,13 @@ interface CommentsProps {
 
 export const Comments: React.FC<CommentsProps> = ({
   task,
-  addComment,
   author,
-  filteredComments,
-  deleteComment,
-  editComment,
 }) => {
+  const comments = useAppSelector(state => state.commentReducer)
+  const filteredComments = comments.filter(comment => comment.taskID === task.ID)
+  const dispatch = useAppDispatch();
+
+
   const [commentText, setCommentText] = useState<string>("");
   const [editedCommentText, setEditedCommentText] = useState<string>("");
   const [isCommentEditeble, setIsCommentEditible] = useState<boolean>(false);
@@ -35,12 +38,20 @@ export const Comments: React.FC<CommentsProps> = ({
   };
 
   const inputComment = () => {
-    addComment(commentText, task.ID);
+    if (commentText !== ''){
+    const commentID = Date.now().toString();
+    const newComment = {
+      ID: commentID,
+      comment: commentText,
+      taskID: task.ID
+    };
+    dispatch(addComment(newComment))
     setCommentText("");
+    }
   };
 
   const saveEditedComment = (commentID: string) => {
-    editComment(commentID, editedCommentText);
+    dispatch(editComment({ID: commentID, newComment: editedCommentText}));
     setIsCommentEditible(false);
   };
 
@@ -73,7 +84,7 @@ export const Comments: React.FC<CommentsProps> = ({
               />
               <Button
                 img={deleteIcon}
-                onClick={() => deleteComment(comment.ID)}
+                onClick={() => dispatch(deleteComment(comment.ID))}
               />
             </div>
           </StyledComment>

@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { columnReducer } from './Column/columnReducers'
 import { taskReducer } from './ducks/card/cardReducers'
+import { commentReducer } from './ducks/comment/commentReducers'
 
 const rootReducer = combineReducers({
 	columnReducer,
-	taskReducer
+	taskReducer,
+	commentReducer
 })
 
 export const setupStore = () => {
