@@ -28,10 +28,6 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
   const [isCommentEditeble, setIsCommentEditible] = useState<boolean>(false);
   const [activeComment, setActiveComment] = useState<CommentType>();
 
-  const changeComment = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewCommentText(event.target.value);
-  };
-
   const inputComment = () => {
     if (newCommentText !== "") {
       const commentID = Date.now().toString();
@@ -89,7 +85,7 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
         onHandleClick={inputComment}
         placeholder="Add a comment"
         value={""}
-        onChange={changeComment}
+        onChange={(e) => setNewCommentText(e.target.value)}
       ></Form>
     </>
   );
