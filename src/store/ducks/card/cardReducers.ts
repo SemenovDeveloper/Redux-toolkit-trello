@@ -2,13 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 import { TaskType } from "types/types";
 import { addTask, renameTask, deleteTask, editDescription, deleteDescription } from "./cardActions";
 
-
-const initialState: TaskType[] = [{
-  taskTitle: 'read',
-  ID: '1234564785953',
-  columnID: "95891ca7-f3c7-4070-a0cf-3c9aaa9f4c85",
-  description: 'dupudu'
-}];
+const initialState: TaskType[] = [];
 
 export const taskReducer = createReducer(initialState, (builder) => {
   builder
