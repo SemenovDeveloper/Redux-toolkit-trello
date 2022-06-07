@@ -22,32 +22,5 @@ export const commentReducer = createReducer(initialState, (builder) => {
     .addCase(deleteComment, (state, action) => {
       return state.filter(comment => comment.ID !== action.payload)
     })
-    // .addCase(renameTask, (state, action) => {
-    //   return state.map(task => {
-    //     if(task.ID === action.payload.ID){
-    //       return {...task, taskTitle: action.payload.newTitle}
-    //     }
-    //     return task
-    //   })
-    // })
-    // .addCase(deleteTask, (state, action) => {
-    //   return state.filter(task => task.ID !== action.payload)
-    // })
-    // .addCase(editDescription, (state, action) => {
-    //   return state.map(task => {
-    //     if(task.ID === action.payload.ID){
-    //       return {...task, description: action.payload.desription}
-    //     }
-    //     return task
-    //   })
-    // })
-    // .addCase(deleteDescription, (state, action) => {
-    //   return state.map(task => {
-    //     if(task.ID === action.payload){
-    //       return {...task, description: ''}
-    //     }
-    //     return task
-    //   })
-    // })
-}
+  }
 )

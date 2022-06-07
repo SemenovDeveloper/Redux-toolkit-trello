@@ -8,8 +8,7 @@ import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
 import { Form } from 'ui/Form'
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { deleteColumn } from "store/Column/columnReducers";
-import { renameColumn} from 'store/Column/columnReducers'
+import { renameColumn} from 'store/ducks/column/columnActions'
 import { addTask } from 'store/ducks/card/cardActions'
 
 interface ColumnProps {
@@ -46,7 +45,6 @@ export const Column: React.FC<ColumnProps> = ({
   const [isColumnEditeble, setIsColumnEditeble] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>("");
 
-  // const {} = useAppSelector(state => state.columnReducer)
   const dispatch = useAppDispatch();
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,10 +77,6 @@ export const Column: React.FC<ColumnProps> = ({
     setIsColumnEditeble(false);
   };
 
-  const deleteColumnHandler = (columnID: string) => {
-    dispatch(deleteColumn(columnID))
-  }
-
   return (
     <StyledContainer>
       <div>
@@ -94,15 +88,6 @@ export const Column: React.FC<ColumnProps> = ({
           ></Button>
         </FlexContainer>
         {isColumnEditeble && (
-          // <form onSubmit={submitColumnName}>
-          //   <input 
-          //     type="text" 
-          //     name='column-title'
-          //     onChange={changeColumnName}
-          //     defaultValue={columnData.columnTitle}
-          //   />
-          //   <button type="submit">save</button>
-          // </form>
           <Form
             onHandleClick={submitColumnName} 
             placeholder="Enter Column Name"
@@ -110,7 +95,6 @@ export const Column: React.FC<ColumnProps> = ({
             onChange={changeColumnName}
           />
         )}
-        <button onClick={() => deleteColumnHandler(columnID)}>del</button> 
       </div>
       <Cards
         columnData={columnData}

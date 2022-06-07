@@ -6,28 +6,23 @@ import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
-import { addComment, deleteComment, editComment } from 'store/ducks/comment/commentActions'
+import {
+  addComment,
+  deleteComment,
+  editComment,
+} from "store/ducks/comment/commentActions";
 
 interface CommentsProps {
-  author: string;
   task: TaskType;
-  comments: CommentType[];
-  columnData: ColumnType;
-  filteredComments: CommentType[];
-  addComment: (comment: string, taskID: string) => void;
-  deleteComment: (commentID: string) => void;
-  editComment: (commentID: string, commentText: string) => void;
 }
 
-export const Comments: React.FC<CommentsProps> = ({
-  task,
-  author,
-}) => {
-  const comments = useAppSelector(state => state.commentReducer)
-  const filteredComments = comments.filter(comment => comment.taskID === task.ID)
+export const Comments: React.FC<CommentsProps> = ({ task }) => {
   const dispatch = useAppDispatch();
-
-
+  const comments = useAppSelector((state) => state.commentReducer);
+  const filteredComments = comments.filter(
+    (comment) => comment.taskID === task.ID
+  );
+  const author = useAppSelector((state) => state.authorReducer);
   const [commentText, setCommentText] = useState<string>("");
   const [editedCommentText, setEditedCommentText] = useState<string>("");
   const [isCommentEditeble, setIsCommentEditible] = useState<boolean>(false);
@@ -38,20 +33,20 @@ export const Comments: React.FC<CommentsProps> = ({
   };
 
   const inputComment = () => {
-    if (commentText !== ''){
-    const commentID = Date.now().toString();
-    const newComment = {
-      ID: commentID,
-      comment: commentText,
-      taskID: task.ID
-    };
-    dispatch(addComment(newComment))
-    setCommentText("");
+    if (commentText !== "") {
+      const commentID = Date.now().toString();
+      const newComment = {
+        ID: commentID,
+        comment: commentText,
+        taskID: task.ID,
+      };
+      dispatch(addComment(newComment));
+      setCommentText("");
     }
   };
 
   const saveEditedComment = (commentID: string) => {
-    dispatch(editComment({ID: commentID, newComment: editedCommentText}));
+    dispatch(editComment({ ID: commentID, newComment: editedCommentText }));
     setIsCommentEditible(false);
   };
 
@@ -65,8 +60,8 @@ export const Comments: React.FC<CommentsProps> = ({
               <Title>{author}</Title>
               <CommentText>{comment.comment}</CommentText>
               {isCommentEditeble && comment.ID === activeComment?.ID && (
-                <Form 
-                  onHandleClick={() => saveEditedComment(comment.ID)} 
+                <Form
+                  onHandleClick={() => saveEditedComment(comment.ID)}
                   placeholder="de a comment"
                   value={comment.comment}
                   onChange={(e) => setEditedCommentText(e.target.value)}
@@ -90,13 +85,12 @@ export const Comments: React.FC<CommentsProps> = ({
           </StyledComment>
         );
       })}
-      <Form 
-        onHandleClick={inputComment} 
+      <Form
+        onHandleClick={inputComment}
         placeholder="Add a comment"
         value={commentText}
         onChange={changeComment}
-        >
-      </Form>
+      ></Form>
     </>
   );
 };

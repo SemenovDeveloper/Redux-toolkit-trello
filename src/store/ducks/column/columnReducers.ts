@@ -1,4 +1,5 @@
-import { createReducer, createAction } from "@reduxjs/toolkit";
+import { createReducer } from "@reduxjs/toolkit";
+import { renameColumn } from "./columnActions";
 import { ColumnType } from "types/types";
 
 
@@ -10,8 +11,6 @@ const initialState: ColumnType[] = [
   ]
   ;
 
-export const renameColumn = createAction<ColumnType>('renameColumn');
-export const deleteColumn = createAction<string>('deleteColumn');
 
 export const columnReducer = createReducer(initialState, (builder) => {
   builder
@@ -24,10 +23,6 @@ export const columnReducer = createReducer(initialState, (builder) => {
         }
       })
   })
-    .addCase(deleteColumn, (state, action) => {
-      return state.filter(column => column.ID !== action.payload)
-    })
-}
-)
+})
 
 

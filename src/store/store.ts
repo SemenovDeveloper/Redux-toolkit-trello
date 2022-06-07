@@ -1,12 +1,14 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { columnReducer } from './Column/columnReducers'
-import { taskReducer } from './ducks/card/cardReducers'
-import { commentReducer } from './ducks/comment/commentReducers'
+import { columnReducer } from 'store/ducks/column/columnReducers'
+import { taskReducer } from 'store/ducks/card/cardReducers'
+import { commentReducer } from 'store/ducks/comment/commentReducers'
+import { authorReducer } from 'store/ducks/author/authorReducers'
 
 const rootReducer = combineReducers({
 	columnReducer,
 	taskReducer,
-	commentReducer
+	commentReducer,
+	authorReducer
 })
 
 export const setupStore = () => {

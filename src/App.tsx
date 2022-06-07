@@ -5,12 +5,15 @@ import styled from "styled-components";
 import { Modal } from "components/Modal/Modal";
 import { ColumnType, TaskType, CommentType } from "types/types";
 import { StyledInput } from "ui/StyledInput";
-import { useAppSelector } from 'hooks/redux';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { inputAuthor } from 'store/ducks/author/authorActions'
 
 function App() {
+  const dispatch = useAppDispatch()
   const columns = useAppSelector(state => state.columnReducer)
+  const author = useAppSelector(state => state.authorReducer)
 
-  const [author, setAuthor] = useLocalStorage("name", "user");
+  const [authorName, setAuthorName] = useState("");
   const [tasks, setTasks] = useLocalStorage<TaskType[]>("tasks", []);
   const [comments, setComments] = useLocalStorage<CommentType[]>(
     "comments",
@@ -19,22 +22,15 @@ function App() {
   const [modalActive, setModalActive] = useState<boolean>(author === "user");
 
   const changeAuthor = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAuthor(event.target.value);
+    setAuthorName(event.target.value);
   };
 
-  const inputAuthor = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" && author !== "") {
+  const submitAuthor = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter" && authorName !== "") {
+      dispatch(inputAuthor(authorName))
       setModalActive(false);
     }
   };
-
-  // const renameColumn = (newName: string, columnID: string) => {
-  //   setBoard((perv) =>
-  //     perv.map((column) =>
-  //       column.ID === columnID ? { ...column, columnTitle: newName } : column
-  //     )
-  //   );
-  // };
 
   const addTask = (taskTitle: string, columnID: string) => {
     let taskID: string = Date.now().toString();
@@ -111,8 +107,6 @@ function App() {
             columnID={column.ID}
             tasks={tasks}
             comments={comments}
-            // renameColumn={renameColumn}
-            // addTask={addTask}
             renameTask={renameTask}
             deleteTask={deleteTask}
             addComment={addComment}
@@ -129,12 +123,9 @@ function App() {
             <StyledInput
               type="text"
               placeholder="Enter your name..."
-              onChange={changeAuthor}
-              onKeyPress={inputAuthor}
+              onChange={(e) => setAuthorName(e.target.value)}
+              onKeyPress={submitAuthor}
             ></StyledInput>
-            <SubmitButton onClick={() => setModalActive(false)}>
-              OK
-            </SubmitButton>
           </div>
         </ContentWrapper>
       </Modal>
