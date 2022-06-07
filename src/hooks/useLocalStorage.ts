@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-type ReturnType<T> = [
-  T,
-  React.Dispatch<React.SetStateAction<T>>
-];
+type ReturnType<T> = [T, React.Dispatch<React.SetStateAction<T>>];
 
 export const useLocalStorage = <T>(
   key: string,
@@ -23,12 +20,9 @@ export const useLocalStorage = <T>(
     if (state) {
       try {
         localStorage.setItem(key, JSON.stringify(state));
-      } catch {
-        
-      }
+      } catch {}
     }
   }, [state, key]);
 
   return [state, setState];
 };
-

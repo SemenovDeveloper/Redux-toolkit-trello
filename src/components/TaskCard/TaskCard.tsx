@@ -4,29 +4,32 @@ import { TaskType } from "types/types";
 import { Comments } from "components/Comments";
 import { Modal } from "components/Modal/Modal";
 import { FlexContainer } from "ui/FlexContainer";
-import { Button } from 'ui/Button/Button'
-import { Form } from 'ui/Form/Form';
+import { Button } from "ui/Button/Button";
+import { Form } from "ui/Form/Form";
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
 import closeIcon from "images/closeIcon.svg";
 import commentsIcon from "images/commentsIcon.png";
-import { renameTask, deleteTask, editDescription, deleteDescription } from 'store/ducks/card/cardActions';
-import { useAppDispatch, useAppSelector } from 'hooks/redux'
-
+import {
+  renameTask,
+  deleteTask,
+  editDescription,
+  deleteDescription,
+} from "store/ducks/card/cardActions";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
 
 interface TaskPopupProps {
   task: TaskType;
 }
 
-export const TaskCard: React.FC<TaskPopupProps> = ({
-  task
-}) => {
-
+export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
   const dispatch = useAppDispatch();
-  const comments = useAppSelector(state => state.commentReducer);
-  const author = useAppSelector(state => state.authorReducer);
-  const columns = useAppSelector(state => state.columnReducer);
-  const columnTitle =  columns.find(column => column.ID === task.columnID)?.columnTitle 
+  const comments = useAppSelector((state) => state.commentReducer);
+  const author = useAppSelector((state) => state.authorReducer);
+  const columns = useAppSelector((state) => state.columnReducer);
+  const columnTitle = columns.find(
+    (column) => column.ID === task.columnID
+  )?.columnTitle;
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
     useState<boolean>(false);
@@ -53,15 +56,11 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
     };
   }, []);
 
-  const changeDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDescription(event.target.value);
-  };
-
   const submitTaskName = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(renameTask({ID: task.ID, newTitle: newTaskTitle}))
+    dispatch(renameTask({ ID: task.ID, newTitle: newTaskTitle }));
     setIsTaskTitleEditible(false);
-  }
+  };
 
   return (
     <>
@@ -90,11 +89,11 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
             <NarrowFlexibleContainer>
               {isTaskTitleEditible ? (
                 <Form
-                onHandleClick={submitTaskName} 
-                placeholder="Enter Column Name"
-                value={task.taskTitle}
-                onChange={(e) => setNewTaskTitle(e.target.value)}
-              />            
+                  onHandleClick={submitTaskName}
+                  placeholder="Enter Column Name"
+                  value={task.taskTitle}
+                  onChange={(e) => setNewTaskTitle(e.target.value)}
+                />
               ) : (
                 <PopupTitle>{task.taskTitle}</PopupTitle>
               )}
@@ -130,19 +129,18 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
               {isDescriptionEditible && (
                 <Form
                   onHandleClick={() => {
-                    dispatch(editDescription({ID: task.ID,
-                      desription: description}))
+                    dispatch(
+                      editDescription({ ID: task.ID, desription: description })
+                    );
                     setIsDescriptionEditible(false);
                   }}
                   placeholder="Enter Description..."
                   value={task.description}
-                  onChange={changeDescription}
-                />              
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               )}
             </DescWrapper>
-            <Comments
-              task={task}
-            />
+            <Comments task={task} />
           </div>
         </PopupWrapper>
       </Modal>

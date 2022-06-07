@@ -19,14 +19,14 @@ interface CommentsProps {
 export const Comments: React.FC<CommentsProps> = ({ task }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((state) => state.commentReducer);
-  const filteredComments = comments.filter(
-    (comment) => comment.taskID === task.ID
-  );
   const author = useAppSelector((state) => state.authorReducer);
   const [newCommentText, setNewCommentText] = useState<string>("");
   const [editedCommentText, setEditedCommentText] = useState<string>("");
   const [isCommentEditeble, setIsCommentEditible] = useState<boolean>(false);
   const [activeComment, setActiveComment] = useState<CommentType>();
+  const filteredComments = comments.filter(
+    (comment) => comment.taskID === task.ID
+  );
 
   const inputComment = () => {
     if (newCommentText !== "") {
@@ -84,7 +84,7 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
       <Form
         onHandleClick={inputComment}
         placeholder="Add a comment"
-        value={""}
+        value={''}
         onChange={(e) => setNewCommentText(e.target.value)}
       ></Form>
     </>

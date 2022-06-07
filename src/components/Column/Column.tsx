@@ -6,27 +6,20 @@ import { StyledInput } from "ui/StyledInput";
 import { FlexContainer } from "ui/FlexContainer";
 import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
-import { Form } from 'ui/Form'
-import { useAppDispatch } from 'hooks/redux';
-import { renameColumn} from 'store/ducks/column/columnActions'
-import { addTask } from 'store/ducks/card/cardActions'
+import { Form } from "ui/Form";
+import { useAppDispatch } from "hooks/redux";
+import { renameColumn } from "store/ducks/column/columnActions";
+import { addTask } from "store/ducks/card/cardActions";
 
 interface ColumnProps {
   columnData: ColumnType;
 }
 
-export const Column: React.FC<ColumnProps> = ({
-  columnData,
-}) => {
+export const Column: React.FC<ColumnProps> = ({ columnData }) => {
+  const dispatch = useAppDispatch();
   const [taskTitle, setTaskTitle] = useState("");
   const [isColumnEditeble, setIsColumnEditeble] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>("");
-
-  const dispatch = useAppDispatch();
-
-  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskTitle(event.target.value);
-  };
 
   const keyPressHandler = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && taskTitle !== "") {
@@ -37,18 +30,14 @@ export const Column: React.FC<ColumnProps> = ({
         columnID: columnData.ID,
         description: "",
       };
-      dispatch(addTask(newTask))
+      dispatch(addTask(newTask));
       setTaskTitle("");
     }
   };
 
-  const changeColumnName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setColumnName(event.target.value);
-  };
-
   const submitColumnName = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(renameColumn({ID: columnData.ID, columnTitle: columnName}))
+    dispatch(renameColumn({ ID: columnData.ID, columnTitle: columnName }));
     setIsColumnEditeble(false);
   };
 
@@ -64,20 +53,18 @@ export const Column: React.FC<ColumnProps> = ({
         </FlexContainer>
         {isColumnEditeble && (
           <Form
-            onHandleClick={submitColumnName} 
+            onHandleClick={submitColumnName}
             placeholder="Enter Column Name"
             value={columnData.columnTitle}
-            onChange={changeColumnName}
+            onChange={(e) => setColumnName(e.target.value)}
           />
         )}
       </div>
-      <Cards
-        columnData={columnData}
-      />
+      <Cards columnData={columnData} />
       <StyledInput
         placeholder="Add a card"
         value={taskTitle}
-        onChange={changeHandler}
+        onChange={(e) => setTaskTitle(e.target.value)}
         onKeyPress={keyPressHandler}
       />
     </StyledContainer>
