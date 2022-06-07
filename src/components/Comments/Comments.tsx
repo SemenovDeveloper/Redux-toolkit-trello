@@ -23,26 +23,26 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
     (comment) => comment.taskID === task.ID
   );
   const author = useAppSelector((state) => state.authorReducer);
-  const [commentText, setCommentText] = useState<string>("");
+  const [newCommentText, setNewCommentText] = useState<string>("");
   const [editedCommentText, setEditedCommentText] = useState<string>("");
   const [isCommentEditeble, setIsCommentEditible] = useState<boolean>(false);
   const [activeComment, setActiveComment] = useState<CommentType>();
 
   const changeComment = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCommentText(event.target.value);
+    setNewCommentText(event.target.value);
   };
 
   const inputComment = () => {
-    if (commentText !== "") {
+    if (newCommentText !== "") {
       const commentID = Date.now().toString();
       const newComment = {
         ID: commentID,
-        comment: commentText,
+        comment: newCommentText,
         taskID: task.ID,
       };
-      dispatch(addComment(newComment));
-      setCommentText("");
-    }
+      dispatch(addComment(newComment));    
+      setNewCommentText("");
+    }    
   };
 
   const saveEditedComment = (commentID: string) => {
@@ -88,7 +88,7 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
       <Form
         onHandleClick={inputComment}
         placeholder="Add a comment"
-        value={commentText}
+        value={''}
         onChange={changeComment}
       ></Form>
     </>

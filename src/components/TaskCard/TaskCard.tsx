@@ -30,14 +30,12 @@ interface TaskPopupProps {
 export const TaskCard: React.FC<TaskPopupProps> = ({
   task,
   columnData,
-  author,
-  comments,
-  addComment,
-  deleteComment,
-  editComment,
 }) => {
+
   const dispatch = useAppDispatch();
   const tasks = useAppSelector(state => state.taskReducer); 
+  const comments = useAppSelector(state => state.commentReducer);
+  const author = useAppSelector(state => state.authorReducer)
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
     useState<boolean>(false);
