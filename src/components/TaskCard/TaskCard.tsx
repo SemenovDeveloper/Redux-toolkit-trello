@@ -32,17 +32,12 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
   columnData,
   author,
   comments,
-  // editDescription,
   addComment,
   deleteComment,
   editComment,
-  // deleteTask,
-  // renameTask,
 }) => {
   const dispatch = useAppDispatch();
-  const tasks = useAppSelector(state => state.taskReducer);
-  // const activeTask: TaskType = tasks.find(x => x.ID === task.ID);
-
+  const tasks = useAppSelector(state => state.taskReducer); 
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
     useState<boolean>(false);
@@ -157,14 +152,7 @@ export const TaskCard: React.FC<TaskPopupProps> = ({
               )}
             </DescWrapper>
             <Comments
-              comments={comments}
-              author={author}
               task={task}
-              addComment={addComment}
-              columnData={columnData}
-              filteredComments={filteredComments}
-              deleteComment={deleteComment}
-              editComment={editComment}
             />
           </div>
         </PopupWrapper>
