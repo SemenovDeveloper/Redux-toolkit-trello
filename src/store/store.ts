@@ -1,4 +1,4 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import {
   persistStore,
   persistReducer,
@@ -8,9 +8,14 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import { columnReducer, cardReducer, commentReducer, authorReducer } from "store/ducks";
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import {
+  columnReducer,
+  cardReducer,
+  commentReducer,
+  authorReducer,
+} from "store/ducks";
 
 const rootReducer = combineReducers({
   columnReducer,
@@ -20,18 +25,18 @@ const rootReducer = combineReducers({
 });
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   version: 1,
   storage,
-}
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const setupStore = () => {
   return configureStore({
-    reducer: rootReducer
+    reducer: rootReducer,
   });
 };
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -41,9 +46,9 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-})
+});
 
-export let persistor = persistStore(store)
+export let persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;

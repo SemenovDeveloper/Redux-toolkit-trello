@@ -7,7 +7,6 @@ import { ColumnType } from "types/types";
 import { FlexContainer, Button, Form } from "ui";
 import editIcon from "images/editIcon.svg";
 
-
 interface ColumnProps {
   column: ColumnType;
 }
@@ -49,14 +48,13 @@ export const Column: React.FC<ColumnProps> = ({ column }) => {
             onHandleClick={submitColumnName}
             placeholder="Enter Column Name"
             defaultValue={column.columnTitle}
-            // onChange={(e) => setColumnName(e.target.value)}
           />
         )}
       </div>
       <Cards column={column} />
       <Form
         placeholder="Add a card"
-        defaultValue={''}
+        defaultValue={""}
         onHandleClick={keyPressHandler}
       />
     </StyledContainer>

@@ -15,7 +15,7 @@ export const Cards: React.FC<CardProps> = ({ column }) => {
   return (
     <div>
       {filteredCards.map((card: CardType) => {
-        return <Card key={card.ID} card={card} column={column}/>;
+        return <Card key={card.ID} card={card} column={column} />;
       })}
     </div>
   );
