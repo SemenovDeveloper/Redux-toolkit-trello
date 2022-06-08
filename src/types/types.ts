@@ -1,11 +1,11 @@
 export type CommentType = {
   ID: string
   comment: string
-  taskID: string
+  cardID: string
 }
 
-export type TaskType = {
-  taskTitle: string
+export type CardType = {
+  cardTitle: string
   ID: string
   columnID: string
   description: string

@@ -1,7 +1,7 @@
 import { createAction } from "@reduxjs/toolkit";
-import { TaskType } from "types/types";
+import { CardType } from "types/types";
 
-interface IrenameTask {
+interface IrenameCard {
   ID: string;
   newTitle: string;
 }
@@ -11,9 +11,9 @@ interface IeditDescriotion {
   desription: string;
 }
 
-export const addTask = createAction<TaskType>("addTask");
-export const renameTask = createAction<IrenameTask>("renameTask");
-export const deleteTask = createAction<string>("deleteTask");
+export const addCard = createAction<CardType>("addCard");
+export const renameCard = createAction<IrenameCard>("renameCard");
+export const deleteCard = createAction<string>("deleteCard");
 export const editDescription =
   createAction<IeditDescriotion>("editDescription");
 export const deleteDescription = createAction<string>("deleteDescription");

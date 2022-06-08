@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
-import { TaskType } from "types/types";
+import { CardType } from "types/types";
 import { Comments } from "components/Comments";
 import { Modal } from "components/Modal/Modal";
 import { FlexContainer } from "ui/FlexContainer";
@@ -11,36 +11,36 @@ import deleteIcon from "images/deleteIcon.svg";
 import closeIcon from "images/closeIcon.svg";
 import commentsIcon from "images/commentsIcon.png";
 import {
-  renameTask,
-  deleteTask,
+  renameCard,
+  deleteCard,
   editDescription,
   deleteDescription,
 } from "store/ducks/card/cardActions";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 
-interface TaskPopupProps {
-  task: TaskType;
+interface CardPopupProps {
+  card: CardType;
 }
 
-export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
+export const CardCard: React.FC<CardPopupProps> = ({ card }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((state) => state.commentReducer);
   const author = useAppSelector((state) => state.authorReducer);
   const columns = useAppSelector((state) => state.columnReducer);
   const columnTitle = columns.find(
-    (column) => column.ID === task.columnID
+    (column) => column.ID === card.columnID
   )?.columnTitle;
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
     useState<boolean>(false);
   const [description, setDescription] = useState("");
-  const [isTaskTitleEditible, setIsTaskTitleEditible] =
+  const [isCardTitleEditible, setIsCardTitleEditible] =
     useState<boolean>(false);
-  const [newTaskTitle, setNewTaskTitle] = useState<string>("");
+  const [newCardTitle, setNewCardTitle] = useState<string>("");
 
   const filteredComments = useMemo(
-    () => comments.filter((comment) => task.ID === comment.taskID),
-    [task.ID, comments]
+    () => comments.filter((comment) => card.ID === comment.cardID),
+    [card.ID, comments]
   );
 
   useEffect(() => {
@@ -56,17 +56,17 @@ export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
     };
   }, []);
 
-  const submitTaskName = (e: React.FormEvent) => {
+  const submitCardName = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(renameTask({ ID: task.ID, newTitle: newTaskTitle }));
-    setIsTaskTitleEditible(false);
+    dispatch(renameCard({ ID: card.ID, newTitle: newCardTitle }));
+    setIsCardTitleEditible(false);
   };
 
   return (
     <>
-      <StyledTaskCard>
+      <StyledCardCard>
         <FlexContainer>
-          <TaskTitle>{task.taskTitle}</TaskTitle>
+          <CardTitle>{card.cardTitle}</CardTitle>
           <FlexContainer>
             <Button
               img={editIcon}
@@ -74,7 +74,7 @@ export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
             ></Button>
             <Button
               img={deleteIcon}
-              onClick={() => dispatch(deleteTask(task.ID))}
+              onClick={() => dispatch(deleteCard(card.ID))}
             ></Button>
           </FlexContainer>
         </FlexContainer>
@@ -82,24 +82,24 @@ export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
           <CommentsIcon />
           <p>{filteredComments.length}</p>
         </CommentsBlock>
-      </StyledTaskCard>
+      </StyledCardCard>
       <Modal active={activePopup}>
         <PopupWrapper>
           <FlexContainer>
             <NarrowFlexibleContainer>
-              {isTaskTitleEditible ? (
+              {isCardTitleEditible ? (
                 <Form
-                  onHandleClick={submitTaskName}
+                  onHandleClick={submitCardName}
                   placeholder="Enter Column Name"
-                  value={task.taskTitle}
-                  onChange={(e) => setNewTaskTitle(e.target.value)}
+                  value={card.cardTitle}
+                  onChange={(e) => setNewCardTitle(e.target.value)}
                 />
               ) : (
-                <PopupTitle>{task.taskTitle}</PopupTitle>
+                <PopupTitle>{card.cardTitle}</PopupTitle>
               )}
               <Button
                 img={editIcon}
-                onClick={() => setIsTaskTitleEditible(!isTaskTitleEditible)}
+                onClick={() => setIsCardTitleEditible(!isCardTitleEditible)}
               ></Button>
             </NarrowFlexibleContainer>
             <CloseButton onClick={() => setActivePopup(false)}></CloseButton>
@@ -121,26 +121,26 @@ export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
                   />
                   <Button
                     img={deleteIcon}
-                    onClick={() => dispatch(deleteDescription(task.ID))}
+                    onClick={() => dispatch(deleteDescription(card.ID))}
                   />
                 </div>
               </NarrowFlexibleContainer>
-              <DescText>{task.description}</DescText>
+              <DescText>{card.description}</DescText>
               {isDescriptionEditible && (
                 <Form
                   onHandleClick={() => {
                     dispatch(
-                      editDescription({ ID: task.ID, desription: description })
+                      editDescription({ ID: card.ID, desription: description })
                     );
                     setIsDescriptionEditible(false);
                   }}
                   placeholder="Enter Description..."
-                  value={task.description}
+                  value={card.description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
               )}
             </DescWrapper>
-            <Comments task={task} />
+            <Comments card={card} />
           </div>
         </PopupWrapper>
       </Modal>
@@ -155,7 +155,7 @@ const CommentsIcon = styled.div`
   margin: 5px;
 `;
 
-const StyledTaskCard = styled.div`
+const StyledCardCard = styled.div`
   margin: 5px 0;
   background-color: #ffffff;
   border-radius: 6px;
@@ -210,7 +210,7 @@ const CloseButton = styled.button`
   }
 `;
 
-const TaskTitle = styled.h3`
+const CardTitle = styled.h3`
   min-width: 120px;
   word-wrap: break-word;
 `;

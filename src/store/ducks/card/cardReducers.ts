@@ -1,45 +1,45 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { TaskType } from "types/types";
+import { CardType } from "types/types";
 import {
-  addTask,
-  renameTask,
-  deleteTask,
+  addCard,
+  renameCard,
+  deleteCard,
   editDescription,
   deleteDescription,
 } from "./cardActions";
 
-const initialState: TaskType[] = [];
+const initialState: CardType[] = [];
 
-export const taskReducer = createReducer(initialState, (builder) => {
+export const cardReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(addTask, (state, action) => {
+    .addCase(addCard, (state, action) => {
       state.push(action.payload);
     })
-    .addCase(renameTask, (state, action) => {
-      return state.map((task) => {
-        if (task.ID === action.payload.ID) {
-          return { ...task, taskTitle: action.payload.newTitle };
+    .addCase(renameCard, (state, action) => {
+      return state.map((card) => {
+        if (card.ID === action.payload.ID) {
+          return { ...card, cardTitle: action.payload.newTitle };
         }
-        return task;
+        return card;
       });
     })
-    .addCase(deleteTask, (state, action) => {
-      return state.filter((task) => task.ID !== action.payload);
+    .addCase(deleteCard, (state, action) => {
+      return state.filter((card) => card.ID !== action.payload);
     })
     .addCase(editDescription, (state, action) => {
-      return state.map((task) => {
-        if (task.ID === action.payload.ID) {
-          return { ...task, description: action.payload.desription };
+      return state.map((card) => {
+        if (card.ID === action.payload.ID) {
+          return { ...card, description: action.payload.desription };
         }
-        return task;
+        return card;
       });
     })
     .addCase(deleteDescription, (state, action) => {
-      return state.map((task) => {
-        if (task.ID === action.payload) {
-          return { ...task, description: "" };
+      return state.map((card) => {
+        if (card.ID === action.payload) {
+          return { ...card, description: "" };
         }
-        return task;
+        return card;
       });
     });
 });

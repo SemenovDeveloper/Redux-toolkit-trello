@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Cards } from "components/Cards";
+import { Cards } from "components/CardsBoard/CardsBoard";
 import { ColumnType } from "types/types";
 import { StyledInput } from "ui/StyledInput";
 import { FlexContainer } from "ui/FlexContainer";
@@ -9,7 +9,7 @@ import editIcon from "images/editIcon.svg";
 import { Form } from "ui/Form";
 import { useAppDispatch } from "hooks/redux";
 import { renameColumn } from "store/ducks/column/columnActions";
-import { addTask } from "store/ducks/card/cardActions";
+import { addCard } from "store/ducks/card/cardActions";
 
 interface ColumnProps {
   columnData: ColumnType;
@@ -17,21 +17,21 @@ interface ColumnProps {
 
 export const Column: React.FC<ColumnProps> = ({ columnData }) => {
   const dispatch = useAppDispatch();
-  const [taskTitle, setTaskTitle] = useState("");
+  const [cardTitle, setCardTitle] = useState("");
   const [isColumnEditeble, setIsColumnEditeble] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>("");
 
   const keyPressHandler = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" && taskTitle !== "") {
-      let taskID: string = Date.now().toString();
-      const newTask = {
-        taskTitle: taskTitle,
-        ID: taskID,
+    if (event.key === "Enter" && cardTitle !== "") {
+      let cardID: string = Date.now().toString();
+      const newCard = {
+        cardTitle: cardTitle,
+        ID: cardID,
         columnID: columnData.ID,
         description: "",
       };
-      dispatch(addTask(newTask));
-      setTaskTitle("");
+      dispatch(addCard(newCard));
+      setCardTitle("");
     }
   };
 
@@ -63,8 +63,8 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
       <Cards columnData={columnData} />
       <StyledInput
         placeholder="Add a card"
-        value={taskTitle}
-        onChange={(e) => setTaskTitle(e.target.value)}
+        value={cardTitle}
+        onChange={(e) => setCardTitle(e.target.value)}
         onKeyPress={keyPressHandler}
       />
     </StyledContainer>

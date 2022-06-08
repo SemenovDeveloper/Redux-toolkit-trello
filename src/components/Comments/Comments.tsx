@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { TaskType, CommentType } from "types/types";
+import { CardType, CommentType } from "types/types";
 import { Form } from "ui/Form/Form";
 import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
@@ -13,10 +13,10 @@ import {
 } from "store/ducks/comment/commentActions";
 
 interface CommentsProps {
-  task: TaskType;
+  card: CardType;
 }
 
-export const Comments: React.FC<CommentsProps> = ({ task }) => {
+export const Comments: React.FC<CommentsProps> = ({ card }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((state) => state.commentReducer);
   const author = useAppSelector((state) => state.authorReducer);
@@ -25,7 +25,7 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
   const [isCommentEditeble, setIsCommentEditible] = useState<boolean>(false);
   const [activeComment, setActiveComment] = useState<CommentType>();
   const filteredComments = comments.filter(
-    (comment) => comment.taskID === task.ID
+    (comment) => comment.cardID === card.ID
   );
 
   const inputComment = () => {
@@ -34,7 +34,7 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
       const newComment = {
         ID: commentID,
         comment: newCommentText,
-        taskID: task.ID,
+        cardID: card.ID,
       };
       dispatch(addComment(newComment));
       setNewCommentText("");
