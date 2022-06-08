@@ -1,7 +1,16 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 import { columnReducer, cardReducer, commentReducer, authorReducer } from "store/ducks";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
   columnReducer,
@@ -11,22 +20,30 @@ const rootReducer = combineReducers({
 });
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
+  version: 1,
   storage,
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+}
 
 const setupStore = () => {
   return configureStore({
-    reducer: rootReducer,
+    reducer: rootReducer
   });
 };
 
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 export const store = configureStore({
   reducer: persistedReducer,
-});
-export const persistor = persistStore(store);
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+})
+
+export let persistor = persistStore(store)
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;

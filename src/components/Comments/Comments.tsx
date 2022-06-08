@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { CardType } from "types/types";
+import { CardType, CommentType } from "types/types";
 import { Form, Button } from "ui";
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
@@ -18,7 +18,7 @@ export const Comments: React.FC<CommentsProps> = ({ card }) => {
   const [isCommentEditeble, setIsCommentEditible] = useState<boolean>(false);
   const [editebleCommentID, setEditebleCommentID] = useState<string>();
   const filteredComments = comments.filter(
-    (comment) => comment.cardID === card.ID
+    (comment: CommentType) => comment.cardID === card.ID
   );
 
   const inputComment = (newCommentText: string) => {
@@ -41,7 +41,7 @@ export const Comments: React.FC<CommentsProps> = ({ card }) => {
   return (
     <>
       <StyledTitle>Comments</StyledTitle>
-      {filteredComments.map((comment) => {
+      {filteredComments.map((comment: CommentType) => {
         return (
           <StyledComment key={comment.ID}>
             <TextBlock>

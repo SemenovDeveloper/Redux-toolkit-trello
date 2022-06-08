@@ -4,6 +4,7 @@ import { Modal, Column  } from "components";
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { inputAuthor } from 'store/ducks'
 import { Form } from "ui";
+import { ColumnType } from 'types/types'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -22,7 +23,7 @@ function App() {
     <AppWrapper>
       <StyledH1>Hello, {author}</StyledH1>
       <Board>
-        {columns.map((column) => (
+        {columns.map((column: ColumnType) => (
           <Column
             key={column.ID}
             column={column}

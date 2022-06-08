@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
-import { CardType, ColumnType } from "types/types";
+import { CardType, ColumnType, CommentType } from "types/types";
 import { Comments, Modal } from "components";
 import { FlexContainer, Button, Form } from "ui";
 import editIcon from "images/editIcon.svg";
@@ -26,7 +26,7 @@ export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
     useState<boolean>(false);
 
   const filteredComments = useMemo(
-    () => comments.filter((comment) => card.ID === comment.cardID),
+    () => comments.filter((comment: CommentType) => card.ID === comment.cardID),
     [card.ID, comments]
   );
 

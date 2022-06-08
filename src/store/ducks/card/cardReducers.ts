@@ -1,4 +1,4 @@
-import { bindActionCreators, createReducer } from "@reduxjs/toolkit";
+import { createReducer } from "@reduxjs/toolkit";
 import { CardType } from "types/types";
 import {
   addCard,

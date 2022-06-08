@@ -1,5 +1,5 @@
 import { Card } from "components";
-import { ColumnType } from "types/types";
+import { ColumnType, CardType } from "types/types";
 import { useAppSelector } from "hooks";
 
 interface CardProps {
@@ -9,12 +9,12 @@ interface CardProps {
 export const Cards: React.FC<CardProps> = ({ column }) => {
   const cardsList = useAppSelector((state) => state.cardReducer);
   const filteredCards = cardsList.filter(
-    (card) => card.columnID === column.ID
+    (card: CardType) => card.columnID === column.ID
   );
 
   return (
     <div>
-      {filteredCards.map((card) => {
+      {filteredCards.map((card: CardType) => {
         return <Card key={card.ID} card={card} column={column}/>;
       })}
     </div>
