@@ -1,11 +1,9 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { bindActionCreators, createReducer } from "@reduxjs/toolkit";
 import { CardType } from "types/types";
 import {
   addCard,
-  renameCard,
   deleteCard,
-  editDescription,
-  deleteDescription,
+  editCard
 } from "./cardActions";
 
 const initialState: CardType[] = [];
@@ -15,10 +13,10 @@ export const cardReducer = createReducer(initialState, (builder) => {
     .addCase(addCard, (state, action) => {
       state.push(action.payload);
     })
-    .addCase(renameCard, (state, action) => {
+    .addCase(editCard, (state, action) => {
       return state.map((card) => {
         if (card.ID === action.payload.ID) {
-          return { ...card, cardTitle: action.payload.newTitle };
+          return action.payload;
         }
         return card;
       });
@@ -26,20 +24,4 @@ export const cardReducer = createReducer(initialState, (builder) => {
     .addCase(deleteCard, (state, action) => {
       return state.filter((card) => card.ID !== action.payload);
     })
-    .addCase(editDescription, (state, action) => {
-      return state.map((card) => {
-        if (card.ID === action.payload.ID) {
-          return { ...card, description: action.payload.desription };
-        }
-        return card;
-      });
-    })
-    .addCase(deleteDescription, (state, action) => {
-      return state.map((card) => {
-        if (card.ID === action.payload) {
-          return { ...card, description: "" };
-        }
-        return card;
-      });
-    });
 });

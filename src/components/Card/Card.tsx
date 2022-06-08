@@ -7,12 +7,7 @@ import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
 import closeIcon from "images/closeIcon.svg";
 import commentsIcon from "images/commentsIcon.png";
-import {
-  renameCard,
-  deleteCard,
-  editDescription,
-  deleteDescription,
-} from "store/ducks";
+import { deleteCard, editCard } from "store/ducks";
 import { useAppDispatch, useAppSelector } from "hooks";
 
 interface CardPopupProps {
@@ -49,12 +44,12 @@ export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
   }, []);
 
   const submitCardName = (cardName: string) => {
-    dispatch(renameCard({ ID: card.ID, newTitle: cardName }));
+    dispatch(editCard({ ...card, cardTitle: cardName }));
     setIsCardTitleEditible(false);
   };
 
   const submitEditedDescritption = (description: string) => {
-    dispatch(editDescription({ ID: card.ID, desription: description }));
+    dispatch(editCard({ ...card, description: description }));
     setIsDescriptionEditible(false);
   };
 
@@ -116,7 +111,9 @@ export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
                   />
                   <Button
                     img={deleteIcon}
-                    onClick={() => dispatch(deleteDescription(card.ID))}
+                    onClick={() =>
+                      dispatch(editCard({ ...card, description: "" }))
+                    }
                   />
                 </div>
               </NarrowFlexibleContainer>

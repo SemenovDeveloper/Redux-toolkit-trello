@@ -11,9 +11,7 @@ interface IeditDescriotion {
   desription: string;
 }
 
+
 export const addCard = createAction<CardType>("addCard");
-export const renameCard = createAction<IrenameCard>("renameCard");
+export const editCard = createAction<CardType>('editCard')
 export const deleteCard = createAction<string>("deleteCard");
-export const editDescription =
-  createAction<IeditDescriotion>("editDescription");
-export const deleteDescription = createAction<string>("deleteDescription");
