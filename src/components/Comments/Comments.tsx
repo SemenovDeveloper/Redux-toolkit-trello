@@ -118,21 +118,6 @@ const StyledTitle = styled.h3`
   margin-left: 4px;
 `;
 
-const OkButton = styled.button`
-  padding: 0;
-  margin: 5px;
-  font-size: 14px;
-  border: 1px solid black;
-  border-radius: 5px;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  color: #010140;
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-
 const Title = styled.h5`
   max-width: 50%;
   word-wrap: break-word;
