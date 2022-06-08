@@ -12,10 +12,10 @@ import { renameColumn } from "store/ducks/column/columnActions";
 import { addCard } from "store/ducks/card/cardActions";
 
 interface ColumnProps {
-  columnData: ColumnType;
+  column: ColumnType;
 }
 
-export const Column: React.FC<ColumnProps> = ({ columnData }) => {
+export const Column: React.FC<ColumnProps> = ({ column }) => {
   const dispatch = useAppDispatch();
   const [cardTitle, setCardTitle] = useState("");
   const [isColumnEditeble, setIsColumnEditeble] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
       const newCard = {
         cardTitle: cardTitle,
         ID: cardID,
-        columnID: columnData.ID,
+        columnID: column.ID,
         description: "",
       };
       dispatch(addCard(newCard));
@@ -37,7 +37,7 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
 
   const submitColumnName = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(renameColumn({ ID: columnData.ID, columnTitle: columnName }));
+    dispatch(renameColumn({ ID: column.ID, columnTitle: columnName }));
     setIsColumnEditeble(false);
   };
 
@@ -45,7 +45,7 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
     <StyledContainer>
       <div>
         <FlexContainer>
-          <ColumnTitle>{columnData.columnTitle}</ColumnTitle>
+          <ColumnTitle>{column.columnTitle}</ColumnTitle>
           <Button
             img={editIcon}
             onClick={() => setIsColumnEditeble(!isColumnEditeble)}
@@ -55,12 +55,12 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
           <Form
             onHandleClick={submitColumnName}
             placeholder="Enter Column Name"
-            value={columnData.columnTitle}
+            value={column.columnTitle}
             onChange={(e) => setColumnName(e.target.value)}
           />
         )}
       </div>
-      <Cards columnData={columnData} />
+      <Cards column={column} />
       <StyledInput
         placeholder="Add a card"
         value={cardTitle}

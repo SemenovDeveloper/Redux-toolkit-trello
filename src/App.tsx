@@ -27,7 +27,7 @@ function App() {
         {columns.map((column) => (
           <Column
             key={column.ID}
-            columnData={column}
+            column={column}
           />
         ))}
       </Board>
