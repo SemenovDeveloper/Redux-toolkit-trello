@@ -20,15 +20,13 @@ export const Comments: React.FC<CommentsProps> = ({ card }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((state) => state.commentReducer);
   const author = useAppSelector((state) => state.authorReducer);
-  const [newCommentText, setNewCommentText] = useState<string>("");
-  const [editedCommentText, setEditedCommentText] = useState<string>("");
   const [isCommentEditeble, setIsCommentEditible] = useState<boolean>(false);
-  const [activeComment, setActiveComment] = useState<CommentType>();
+  const [editebleCommentID, setEditebleCommentID] = useState<string>();
   const filteredComments = comments.filter(
     (comment) => comment.cardID === card.ID
   );
 
-  const inputComment = () => {
+  const inputComment = (newCommentText: string) => {
     if (newCommentText !== "") {
       const commentID = Date.now().toString();
       const newComment = {
@@ -37,11 +35,10 @@ export const Comments: React.FC<CommentsProps> = ({ card }) => {
         cardID: card.ID,
       };
       dispatch(addComment(newComment));
-      setNewCommentText("");
     }
   };
 
-  const saveEditedComment = (commentID: string) => {
+  const saveEditedComment = (commentID: string, editedCommentText: string) => {
     dispatch(editComment({ ID: commentID, newComment: editedCommentText }));
     setIsCommentEditible(false);
   };
@@ -55,12 +52,13 @@ export const Comments: React.FC<CommentsProps> = ({ card }) => {
             <TextBlock>
               <Title>{author}</Title>
               <CommentText>{comment.comment}</CommentText>
-              {isCommentEditeble && comment.ID === activeComment?.ID && (
+              {isCommentEditeble && comment.ID === editebleCommentID && (
                 <Form
-                  onHandleClick={() => saveEditedComment(comment.ID)}
-                  placeholder="de a comment"
-                  value={comment.comment}
-                  onChange={(e) => setEditedCommentText(e.target.value)}
+                  onHandleClick={(editedCommentText) =>
+                    saveEditedComment(comment.ID, editedCommentText)
+                  }
+                  placeholder=""
+                  defaultValue={comment.comment}
                 />
               )}
             </TextBlock>
@@ -69,8 +67,7 @@ export const Comments: React.FC<CommentsProps> = ({ card }) => {
                 img={editIcon}
                 onClick={() => {
                   setIsCommentEditible(true);
-                  setEditedCommentText(comment.comment);
-                  setActiveComment(comment);
+                  setEditebleCommentID(comment.ID);
                 }}
               />
               <Button
@@ -84,8 +81,7 @@ export const Comments: React.FC<CommentsProps> = ({ card }) => {
       <Form
         onHandleClick={inputComment}
         placeholder="Add a comment"
-        value={''}
-        onChange={(e) => setNewCommentText(e.target.value)}
+        defaultValue={""}
       ></Form>
     </>
   );

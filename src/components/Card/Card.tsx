@@ -19,8 +19,8 @@ import {
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 
 interface CardPopupProps {
-  card: CardType
-  column: ColumnType
+  card: CardType;
+  column: ColumnType;
 }
 
 export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
@@ -30,10 +30,8 @@ export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
     useState<boolean>(false);
-  const [description, setDescription] = useState("");
   const [isCardTitleEditible, setIsCardTitleEditible] =
     useState<boolean>(false);
-  const [newCardTitle, setNewCardTitle] = useState<string>("");
 
   const filteredComments = useMemo(
     () => comments.filter((comment) => card.ID === comment.cardID),
@@ -53,10 +51,14 @@ export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
     };
   }, []);
 
-  const submitCardName = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(renameCard({ ID: card.ID, newTitle: newCardTitle }));
+  const submitCardName = (cardName: string) => {
+    dispatch(renameCard({ ID: card.ID, newTitle: cardName }));
     setIsCardTitleEditible(false);
+  };
+
+  const submitEditedDescritption = (description: string) => {
+    dispatch(editDescription({ ID: card.ID, desription: description }));
+    setIsDescriptionEditible(false);
   };
 
   return (
@@ -88,8 +90,7 @@ export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
                 <Form
                   onHandleClick={submitCardName}
                   placeholder="Enter Column Name"
-                  value={card.cardTitle}
-                  onChange={(e) => setNewCardTitle(e.target.value)}
+                  defaultValue={""}
                 />
               ) : (
                 <PopupTitle>{card.cardTitle}</PopupTitle>
@@ -125,15 +126,9 @@ export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
               <DescText>{card.description}</DescText>
               {isDescriptionEditible && (
                 <Form
-                  onHandleClick={() => {
-                    dispatch(
-                      editDescription({ ID: card.ID, desription: description })
-                    );
-                    setIsDescriptionEditible(false);
-                  }}
+                  onHandleClick={submitEditedDescritption}
                   placeholder="Enter Description..."
-                  value={card.description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  defaultValue={card.description}
                 />
               )}
             </DescWrapper>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Cards } from "components/CardsBoard/CardsBoard";
 import { ColumnType } from "types/types";
-import { StyledInput } from "ui/StyledInput";
 import { FlexContainer } from "ui/FlexContainer";
 import { Button } from "ui/Button/Button";
 import editIcon from "images/editIcon.svg";
@@ -17,26 +16,22 @@ interface ColumnProps {
 
 export const Column: React.FC<ColumnProps> = ({ column }) => {
   const dispatch = useAppDispatch();
-  const [cardTitle, setCardTitle] = useState("");
   const [isColumnEditeble, setIsColumnEditeble] = useState<boolean>(false);
-  const [columnName, setColumnName] = useState<string>("");
 
-  const keyPressHandler = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" && cardTitle !== "") {
+  const keyPressHandler = (cardName: string) => {
+    if (cardName !== "") {
       let cardID: string = Date.now().toString();
       const newCard = {
-        cardTitle: cardTitle,
+        cardTitle: cardName,
         ID: cardID,
         columnID: column.ID,
         description: "",
       };
       dispatch(addCard(newCard));
-      setCardTitle("");
     }
   };
 
-  const submitColumnName = (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitColumnName = (columnName: string) => {
     dispatch(renameColumn({ ID: column.ID, columnTitle: columnName }));
     setIsColumnEditeble(false);
   };
@@ -55,17 +50,16 @@ export const Column: React.FC<ColumnProps> = ({ column }) => {
           <Form
             onHandleClick={submitColumnName}
             placeholder="Enter Column Name"
-            value={column.columnTitle}
-            onChange={(e) => setColumnName(e.target.value)}
+            defaultValue={column.columnTitle}
+            // onChange={(e) => setColumnName(e.target.value)}
           />
         )}
       </div>
       <Cards column={column} />
-      <StyledInput
+      <Form
         placeholder="Add a card"
-        value={cardTitle}
-        onChange={(e) => setCardTitle(e.target.value)}
-        onKeyPress={keyPressHandler}
+        defaultValue={''}
+        onHandleClick={keyPressHandler}
       />
     </StyledContainer>
   );

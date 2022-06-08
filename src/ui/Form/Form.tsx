@@ -1,36 +1,37 @@
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { StyledInput } from "ui/StyledInput";
 
 interface FormProps {
   children?: React.ReactNode;
-  onHandleClick: (e: React.FormEvent) => void
-  placeholder:string
-  value: string
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onHandleClick: (value: string) => void;
+  placeholder: string;
+  defaultValue: string;
 }
 
-export const Form : React.FC<FormProps> = ({ onHandleClick, placeholder, value, onChange}) => {
-  const {
-    register,
-    formState: {errors},
-  } = useForm();
+type FormValues = {
+  inputValue: string;
+  ID?: string
+};
 
-  const onSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    onHandleClick(event);
-   }
+export const Form: React.FC<FormProps> = ({
+  onHandleClick,
+  placeholder,
+  defaultValue,
+}) => {
+
+  const { register, handleSubmit } = useForm<FormValues>();
+  const onSubmit: SubmitHandler<FormValues> = (data) =>
+    onHandleClick(data.inputValue);
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <StyledInput
-        {...register("value")}
-        type='text'
-        onChange={onChange}
+        defaultValue={defaultValue}
         placeholder={placeholder}
-        defaultValue={value}
-        ></StyledInput>
-      <SubmitButton>OK</SubmitButton>
+        {...register("inputValue")}
+      />
+      <SubmitButton type="submit">ok</SubmitButton>
     </form>
   );
 };
