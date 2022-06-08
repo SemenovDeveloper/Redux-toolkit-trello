@@ -1,1 +1,2 @@
-export * from './useLocalStorage'
+export * from 'hooks/useLocalStorage'
+export * from 'hooks/redux'

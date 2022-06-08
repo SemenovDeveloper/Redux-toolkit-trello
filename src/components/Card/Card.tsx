@@ -1,11 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 import { CardType, ColumnType } from "types/types";
-import { Comments } from "components/Comments";
-import { Modal } from "components/Modal/Modal";
-import { FlexContainer } from "ui/FlexContainer";
-import { Button } from "ui/Button/Button";
-import { Form } from "ui/Form/Form";
+import { Comments, Modal } from "components";
+import { FlexContainer, Button, Form } from "ui";
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
 import closeIcon from "images/closeIcon.svg";
@@ -15,8 +12,8 @@ import {
   deleteCard,
   editDescription,
   deleteDescription,
-} from "store/ducks/card/cardActions";
-import { useAppDispatch, useAppSelector } from "hooks/redux";
+} from "store/ducks";
+import { useAppDispatch, useAppSelector } from "hooks";
 
 interface CardPopupProps {
   card: CardType;

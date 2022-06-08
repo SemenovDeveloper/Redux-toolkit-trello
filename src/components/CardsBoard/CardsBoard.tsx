@@ -1,6 +1,6 @@
-import { Card } from "components/Card";
+import { Card } from "components";
 import { ColumnType } from "types/types";
-import { useAppSelector } from "hooks/redux";
+import { useAppSelector } from "hooks";
 
 interface CardProps {
   column: ColumnType;

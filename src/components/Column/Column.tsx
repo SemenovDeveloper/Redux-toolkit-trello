@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Cards } from "components/CardsBoard/CardsBoard";
+import { useAppDispatch } from "hooks";
+import { renameColumn, addCard } from "store/ducks";
+import { Cards } from "components";
 import { ColumnType } from "types/types";
-import { FlexContainer } from "ui/FlexContainer";
-import { Button } from "ui/Button/Button";
+import { FlexContainer, Button, Form } from "ui";
 import editIcon from "images/editIcon.svg";
-import { Form } from "ui/Form";
-import { useAppDispatch } from "hooks/redux";
-import { renameColumn } from "store/ducks/column/columnActions";
-import { addCard } from "store/ducks/card/cardActions";
+
 
 interface ColumnProps {
   column: ColumnType;

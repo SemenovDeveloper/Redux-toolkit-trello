@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import { Column } from "components/Column";
+import { useState } from "react";
 import styled from "styled-components";
-import { Modal } from "components/Modal/Modal";
-import { StyledInput } from "ui/StyledInput";
+import { Modal, Column  } from "components";
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { inputAuthor } from 'store/ducks/author/authorActions'
-import { Form } from "ui/Form";
+import { inputAuthor } from 'store/ducks'
+import { Form } from "ui";
 
 function App() {
   const dispatch = useAppDispatch()

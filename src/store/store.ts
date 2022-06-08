@@ -1,8 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { columnReducer } from "store/ducks/column/columnReducers";
-import { cardReducer } from "store/ducks/card/cardReducers";
-import { commentReducer } from "store/ducks/comment/commentReducers";
-import { authorReducer } from "store/ducks/author/authorReducers";
+import { columnReducer, cardReducer, commentReducer, authorReducer } from "store/ducks";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 

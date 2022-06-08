@@ -1,16 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { CardType, CommentType } from "types/types";
-import { Form } from "ui/Form/Form";
-import { Button } from "ui/Button/Button";
+import { CardType } from "types/types";
+import { Form, Button } from "ui";
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
-import { useAppDispatch, useAppSelector } from "hooks/redux";
-import {
-  addComment,
-  deleteComment,
-  editComment,
-} from "store/ducks/comment/commentActions";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { addComment, deleteComment, editComment } from "store/ducks";
 
 interface CommentsProps {
   card: CardType;
@@ -66,7 +61,7 @@ export const Comments: React.FC<CommentsProps> = ({ card }) => {
               <Button
                 img={editIcon}
                 onClick={() => {
-                  setIsCommentEditible(true);
+                  setIsCommentEditible(!isCommentEditeble);
                   setEditebleCommentID(comment.ID);
                 }}
               />
@@ -81,7 +76,7 @@ export const Comments: React.FC<CommentsProps> = ({ card }) => {
       <Form
         onHandleClick={inputComment}
         placeholder="Add a comment"
-        defaultValue={""}
+        defaultValue=""
       ></Form>
     </>
   );
