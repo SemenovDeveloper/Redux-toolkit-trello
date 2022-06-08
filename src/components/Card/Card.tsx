@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
-import { CardType } from "types/types";
+import { CardType, ColumnType } from "types/types";
 import { Comments } from "components/Comments";
 import { Modal } from "components/Modal/Modal";
 import { FlexContainer } from "ui/FlexContainer";
@@ -19,17 +19,14 @@ import {
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 
 interface CardPopupProps {
-  card: CardType;
+  card: CardType
+  column: ColumnType
 }
 
-export const CardCard: React.FC<CardPopupProps> = ({ card }) => {
+export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((state) => state.commentReducer);
   const author = useAppSelector((state) => state.authorReducer);
-  const columns = useAppSelector((state) => state.columnReducer);
-  const columnTitle = columns.find(
-    (column) => column.ID === card.columnID
-  )?.columnTitle;
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
     useState<boolean>(false);
@@ -105,7 +102,7 @@ export const CardCard: React.FC<CardPopupProps> = ({ card }) => {
             <CloseButton onClick={() => setActivePopup(false)}></CloseButton>
           </FlexContainer>
           <StyledText>
-            in list <BoldText>{columnTitle}</BoldText> by{" "}
+            in list <BoldText>{column.columnTitle}</BoldText> by{" "}
             <BoldText>{author}</BoldText>
           </StyledText>
           <div>
