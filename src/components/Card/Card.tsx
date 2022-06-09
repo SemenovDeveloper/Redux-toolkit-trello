@@ -1,46 +1,33 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
-import { TaskType } from "types/types";
-import { Comments } from "components/Comments";
-import { Modal } from "components/Modal/Modal";
-import { FlexContainer } from "ui/FlexContainer";
-import { Button } from "ui/Button/Button";
-import { Form } from "ui/Form/Form";
+import { CardType, ColumnType, CommentType } from "types/types";
+import { Comments, Modal } from "components";
+import { FlexContainer, Button, Form } from "ui";
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
 import closeIcon from "images/closeIcon.svg";
 import commentsIcon from "images/commentsIcon.png";
-import {
-  renameTask,
-  deleteTask,
-  editDescription,
-  deleteDescription,
-} from "store/ducks/card/cardActions";
-import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { deleteCard, editCard } from "store/ducks";
+import { useAppDispatch, useAppSelector } from "hooks";
 
-interface TaskPopupProps {
-  task: TaskType;
+interface CardPopupProps {
+  card: CardType;
+  column: ColumnType;
 }
 
-export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
+export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((state) => state.commentReducer);
   const author = useAppSelector((state) => state.authorReducer);
-  const columns = useAppSelector((state) => state.columnReducer);
-  const columnTitle = columns.find(
-    (column) => column.ID === task.columnID
-  )?.columnTitle;
   const [activePopup, setActivePopup] = useState(false);
   const [isDescriptionEditible, setIsDescriptionEditible] =
     useState<boolean>(false);
-  const [description, setDescription] = useState("");
-  const [isTaskTitleEditible, setIsTaskTitleEditible] =
+  const [isCardTitleEditible, setIsCardTitleEditible] =
     useState<boolean>(false);
-  const [newTaskTitle, setNewTaskTitle] = useState<string>("");
 
   const filteredComments = useMemo(
-    () => comments.filter((comment) => task.ID === comment.taskID),
-    [task.ID, comments]
+    () => comments.filter((comment: CommentType) => card.ID === comment.cardID),
+    [card.ID, comments]
   );
 
   useEffect(() => {
@@ -56,17 +43,21 @@ export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
     };
   }, []);
 
-  const submitTaskName = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(renameTask({ ID: task.ID, newTitle: newTaskTitle }));
-    setIsTaskTitleEditible(false);
+  const submitCardName = (cardName: string) => {
+    dispatch(editCard({ ...card, cardTitle: cardName }));
+    setIsCardTitleEditible(false);
+  };
+
+  const submitEditedDescritption = (description: string) => {
+    dispatch(editCard({ ...card, description: description }));
+    setIsDescriptionEditible(false);
   };
 
   return (
     <>
-      <StyledTaskCard>
+      <StyledCardCard>
         <FlexContainer>
-          <TaskTitle>{task.taskTitle}</TaskTitle>
+          <CardTitle>{card.cardTitle}</CardTitle>
           <FlexContainer>
             <Button
               img={editIcon}
@@ -74,7 +65,7 @@ export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
             ></Button>
             <Button
               img={deleteIcon}
-              onClick={() => dispatch(deleteTask(task.ID))}
+              onClick={() => dispatch(deleteCard(card.ID))}
             ></Button>
           </FlexContainer>
         </FlexContainer>
@@ -82,30 +73,29 @@ export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
           <CommentsIcon />
           <p>{filteredComments.length}</p>
         </CommentsBlock>
-      </StyledTaskCard>
+      </StyledCardCard>
       <Modal active={activePopup}>
         <PopupWrapper>
           <FlexContainer>
             <NarrowFlexibleContainer>
-              {isTaskTitleEditible ? (
+              {isCardTitleEditible ? (
                 <Form
-                  onHandleClick={submitTaskName}
+                  onHandleClick={submitCardName}
                   placeholder="Enter Column Name"
-                  value={task.taskTitle}
-                  onChange={(e) => setNewTaskTitle(e.target.value)}
+                  defaultValue={""}
                 />
               ) : (
-                <PopupTitle>{task.taskTitle}</PopupTitle>
+                <PopupTitle>{card.cardTitle}</PopupTitle>
               )}
               <Button
                 img={editIcon}
-                onClick={() => setIsTaskTitleEditible(!isTaskTitleEditible)}
+                onClick={() => setIsCardTitleEditible(!isCardTitleEditible)}
               ></Button>
             </NarrowFlexibleContainer>
-            <CloseButton onClick={() => setActivePopup(false)}></CloseButton>
+            <Button  img={closeIcon} onClick={() => setActivePopup(false)}></Button>
           </FlexContainer>
           <StyledText>
-            in list <BoldText>{columnTitle}</BoldText> by{" "}
+            in list <BoldText>{column.columnTitle}</BoldText> by{" "}
             <BoldText>{author}</BoldText>
           </StyledText>
           <div>
@@ -121,26 +111,22 @@ export const TaskCard: React.FC<TaskPopupProps> = ({ task }) => {
                   />
                   <Button
                     img={deleteIcon}
-                    onClick={() => dispatch(deleteDescription(task.ID))}
+                    onClick={() =>
+                      dispatch(editCard({ ...card, description: "" }))
+                    }
                   />
                 </div>
               </NarrowFlexibleContainer>
-              <DescText>{task.description}</DescText>
+              <DescText>{card.description}</DescText>
               {isDescriptionEditible && (
                 <Form
-                  onHandleClick={() => {
-                    dispatch(
-                      editDescription({ ID: task.ID, desription: description })
-                    );
-                    setIsDescriptionEditible(false);
-                  }}
+                  onHandleClick={submitEditedDescritption}
                   placeholder="Enter Description..."
-                  value={task.description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  defaultValue={card.description}
                 />
               )}
             </DescWrapper>
-            <Comments task={task} />
+            <Comments card={card} />
           </div>
         </PopupWrapper>
       </Modal>
@@ -155,7 +141,7 @@ const CommentsIcon = styled.div`
   margin: 5px;
 `;
 
-const StyledTaskCard = styled.div`
+const StyledCardCard = styled.div`
   margin: 5px 0;
   background-color: #ffffff;
   border-radius: 6px;
@@ -194,23 +180,7 @@ const DescText = styled.div`
   word-wrap: break-word;
 `;
 
-const CloseButton = styled.button`
-  padding: 0;
-  margin: 5px;
-  background: center/80% url(${closeIcon}) no-repeat;
-  font-size: 14px;
-  border: 1px solid black;
-  border-radius: 5px;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  color: #010140;
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-
-const TaskTitle = styled.h3`
+const CardTitle = styled.h3`
   min-width: 120px;
   word-wrap: break-word;
 `;

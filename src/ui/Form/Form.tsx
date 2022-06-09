@@ -1,51 +1,45 @@
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
-import { StyledInput } from "ui/StyledInput";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { StyledInput } from "ui";
+import { Button } from 'ui'
+import saveIcon from 'images/saveIcon.svg'
 
 interface FormProps {
   children?: React.ReactNode;
-  onHandleClick: (e: React.FormEvent) => void
-  placeholder:string
-  value: string
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onHandleClick: (value: string) => void;
+  placeholder: string;
+  defaultValue: string;
 }
 
-export const Form : React.FC<FormProps> = ({ onHandleClick, placeholder, value, onChange}) => {
-  const {
-    register,
-    formState: {errors},
-  } = useForm();
+type FormValues = {
+  inputValue: string;
+  ID?: string
+};
 
-  const onSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    onHandleClick(event);
-   }
+export const Form: React.FC<FormProps> = ({
+  onHandleClick,
+  placeholder,
+  defaultValue,
+}) => {
+
+  const { register, handleSubmit } = useForm<FormValues>();
+  const onSubmit: SubmitHandler<FormValues> = (data) =>
+    onHandleClick(data.inputValue);
 
   return (
-    <form onSubmit={onSubmit}>
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <StyledInput
-        {...register("value")}
-        type='text'
-        onChange={onChange}
+        defaultValue={defaultValue}
         placeholder={placeholder}
-        defaultValue={value}
-        ></StyledInput>
-      <SubmitButton>OK</SubmitButton>
-    </form>
+        {...register("inputValue")}
+      />
+      <Button img={saveIcon}/>
+    </StyledForm>
   );
 };
 
-const SubmitButton = styled.button`
-  padding: 0;
-  margin: 5px;
-  font-size: 14px;
-  border: 1px solid black;
-  border-radius: 5px;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  color: #010140;
-  &:hover {
-    opacity: 0.5;
-  }
-`;
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`

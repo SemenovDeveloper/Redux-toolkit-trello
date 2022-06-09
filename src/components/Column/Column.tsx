@@ -1,43 +1,35 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Cards } from "components/Cards";
+import { useAppDispatch } from "hooks";
+import { renameColumn, addCard } from "store/ducks";
+import { Cards } from "components";
 import { ColumnType } from "types/types";
-import { StyledInput } from "ui/StyledInput";
-import { FlexContainer } from "ui/FlexContainer";
-import { Button } from "ui/Button/Button";
+import { FlexContainer, Button, Form } from "ui";
 import editIcon from "images/editIcon.svg";
-import { Form } from "ui/Form";
-import { useAppDispatch } from "hooks/redux";
-import { renameColumn } from "store/ducks/column/columnActions";
-import { addTask } from "store/ducks/card/cardActions";
 
 interface ColumnProps {
-  columnData: ColumnType;
+  column: ColumnType;
 }
 
-export const Column: React.FC<ColumnProps> = ({ columnData }) => {
+export const Column: React.FC<ColumnProps> = ({ column }) => {
   const dispatch = useAppDispatch();
-  const [taskTitle, setTaskTitle] = useState("");
   const [isColumnEditeble, setIsColumnEditeble] = useState<boolean>(false);
-  const [columnName, setColumnName] = useState<string>("");
 
-  const keyPressHandler = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" && taskTitle !== "") {
-      let taskID: string = Date.now().toString();
-      const newTask = {
-        taskTitle: taskTitle,
-        ID: taskID,
-        columnID: columnData.ID,
+  const keyPressHandler = (cardName: string) => {
+    if (cardName !== "") {
+      let cardID: string = Date.now().toString();
+      const newCard = {
+        cardTitle: cardName,
+        ID: cardID,
+        columnID: column.ID,
         description: "",
       };
-      dispatch(addTask(newTask));
-      setTaskTitle("");
+      dispatch(addCard(newCard));
     }
   };
 
-  const submitColumnName = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(renameColumn({ ID: columnData.ID, columnTitle: columnName }));
+  const submitColumnName = (columnName: string) => {
+    dispatch(renameColumn({ ID: column.ID, columnTitle: columnName }));
     setIsColumnEditeble(false);
   };
 
@@ -45,7 +37,7 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
     <StyledContainer>
       <div>
         <FlexContainer>
-          <ColumnTitle>{columnData.columnTitle}</ColumnTitle>
+          <ColumnTitle>{column.columnTitle}</ColumnTitle>
           <Button
             img={editIcon}
             onClick={() => setIsColumnEditeble(!isColumnEditeble)}
@@ -55,17 +47,15 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
           <Form
             onHandleClick={submitColumnName}
             placeholder="Enter Column Name"
-            value={columnData.columnTitle}
-            onChange={(e) => setColumnName(e.target.value)}
+            defaultValue={column.columnTitle}
           />
         )}
       </div>
-      <Cards columnData={columnData} />
-      <StyledInput
+      <Cards column={column} />
+      <Form
         placeholder="Add a card"
-        value={taskTitle}
-        onChange={(e) => setTaskTitle(e.target.value)}
-        onKeyPress={keyPressHandler}
+        defaultValue={""}
+        onHandleClick={keyPressHandler}
       />
     </StyledContainer>
   );

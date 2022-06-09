@@ -1,47 +1,39 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { TaskType, CommentType } from "types/types";
-import { Form } from "ui/Form/Form";
-import { Button } from "ui/Button/Button";
+import { CardType, CommentType } from "types/types";
+import { Form, Button } from "ui";
 import editIcon from "images/editIcon.svg";
 import deleteIcon from "images/deleteIcon.svg";
-import { useAppDispatch, useAppSelector } from "hooks/redux";
-import {
-  addComment,
-  deleteComment,
-  editComment,
-} from "store/ducks/comment/commentActions";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { addComment, deleteComment, editComment } from "store/ducks";
 
 interface CommentsProps {
-  task: TaskType;
+  card: CardType;
 }
 
-export const Comments: React.FC<CommentsProps> = ({ task }) => {
+export const Comments: React.FC<CommentsProps> = ({ card }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((state) => state.commentReducer);
   const author = useAppSelector((state) => state.authorReducer);
-  const [newCommentText, setNewCommentText] = useState<string>("");
-  const [editedCommentText, setEditedCommentText] = useState<string>("");
   const [isCommentEditeble, setIsCommentEditible] = useState<boolean>(false);
-  const [activeComment, setActiveComment] = useState<CommentType>();
+  const [editebleCommentID, setEditebleCommentID] = useState<string>();
   const filteredComments = comments.filter(
-    (comment) => comment.taskID === task.ID
+    (comment: CommentType) => comment.cardID === card.ID
   );
 
-  const inputComment = () => {
+  const inputComment = (newCommentText: string) => {
     if (newCommentText !== "") {
       const commentID = Date.now().toString();
       const newComment = {
         ID: commentID,
         comment: newCommentText,
-        taskID: task.ID,
+        cardID: card.ID,
       };
       dispatch(addComment(newComment));
-      setNewCommentText("");
     }
   };
 
-  const saveEditedComment = (commentID: string) => {
+  const saveEditedComment = (commentID: string, editedCommentText: string) => {
     dispatch(editComment({ ID: commentID, newComment: editedCommentText }));
     setIsCommentEditible(false);
   };
@@ -49,18 +41,19 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
   return (
     <>
       <StyledTitle>Comments</StyledTitle>
-      {filteredComments.map((comment) => {
+      {filteredComments.map((comment: CommentType) => {
         return (
           <StyledComment key={comment.ID}>
             <TextBlock>
               <Title>{author}</Title>
               <CommentText>{comment.comment}</CommentText>
-              {isCommentEditeble && comment.ID === activeComment?.ID && (
+              {isCommentEditeble && comment.ID === editebleCommentID && (
                 <Form
-                  onHandleClick={() => saveEditedComment(comment.ID)}
-                  placeholder="de a comment"
-                  value={comment.comment}
-                  onChange={(e) => setEditedCommentText(e.target.value)}
+                  onHandleClick={(editedCommentText) =>
+                    saveEditedComment(comment.ID, editedCommentText)
+                  }
+                  placeholder=""
+                  defaultValue={comment.comment}
                 />
               )}
             </TextBlock>
@@ -68,9 +61,8 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
               <Button
                 img={editIcon}
                 onClick={() => {
-                  setIsCommentEditible(true);
-                  setEditedCommentText(comment.comment);
-                  setActiveComment(comment);
+                  setIsCommentEditible(!isCommentEditeble);
+                  setEditebleCommentID(comment.ID);
                 }}
               />
               <Button
@@ -84,8 +76,7 @@ export const Comments: React.FC<CommentsProps> = ({ task }) => {
       <Form
         onHandleClick={inputComment}
         placeholder="Add a comment"
-        value={''}
-        onChange={(e) => setNewCommentText(e.target.value)}
+        defaultValue=""
       ></Form>
     </>
   );
@@ -116,21 +107,6 @@ const CommentText = styled.p`
 
 const StyledTitle = styled.h3`
   margin-left: 4px;
-`;
-
-const OkButton = styled.button`
-  padding: 0;
-  margin: 5px;
-  font-size: 14px;
-  border: 1px solid black;
-  border-radius: 5px;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  color: #010140;
-  &:hover {
-    opacity: 0.5;
-  }
 `;
 
 const Title = styled.h5`

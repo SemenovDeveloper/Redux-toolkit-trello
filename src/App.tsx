@@ -1,20 +1,19 @@
-import React, { useState } from "react";
-import { Column } from "components/Column";
+import { useState } from "react";
 import styled from "styled-components";
-import { Modal } from "components/Modal/Modal";
-import { StyledInput } from "ui/StyledInput";
+import { Modal, Column  } from "components";
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { inputAuthor } from 'store/ducks/author/authorActions'
+import { inputAuthor } from 'store/ducks'
+import { Form } from "ui";
+import { ColumnType } from 'types/types'
 
 function App() {
   const dispatch = useAppDispatch()
-  const columns = useAppSelector(state => state.columnReducer)
-  const author = useAppSelector(state => state.authorReducer)
-  const [authorName, setAuthorName] = useState("");
+  const columns = useAppSelector(state => state.columnReducer);
+  const author = useAppSelector(state => state.authorReducer);
   const [modalActive, setModalActive] = useState<boolean>(author === "user");
 
-  const submitAuthor = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" && authorName !== "") {
+  const submitAuthor = (authorName: string) => {
+    if (authorName !== "") {
       dispatch(inputAuthor(authorName))
       setModalActive(false);
     }
@@ -24,10 +23,10 @@ function App() {
     <AppWrapper>
       <StyledH1>Hello, {author}</StyledH1>
       <Board>
-        {columns.map((column) => (
+        {columns.map((column: ColumnType) => (
           <Column
             key={column.ID}
-            columnData={column}
+            column={column}
           />
         ))}
       </Board>
@@ -35,12 +34,11 @@ function App() {
         <ContentWrapper>
           <h2>Welcome to NashTrello</h2>
           <div>
-            <StyledInput
-              type="text"
-              placeholder="Enter your name..."
-              onChange={(e) => setAuthorName(e.target.value)}
-              onKeyPress={submitAuthor}
-            ></StyledInput>
+            <Form
+              onHandleClick={submitAuthor}
+              placeholder="Enter your Name"
+              defaultValue={""}
+            ></Form>
           </div>
         </ContentWrapper>
       </Modal>
