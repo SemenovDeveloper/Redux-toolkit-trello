@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { StyledInput } from "ui/StyledInput";
+import { StyledInput } from "ui";
+import { Button } from 'ui'
+import saveIcon from 'images/saveIcon.svg'
 
 interface FormProps {
   children?: React.ReactNode;
@@ -25,28 +27,19 @@ export const Form: React.FC<FormProps> = ({
     onHandleClick(data.inputValue);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <StyledInput
         defaultValue={defaultValue}
         placeholder={placeholder}
         {...register("inputValue")}
       />
-      <SubmitButton type="submit">ok</SubmitButton>
-    </form>
+      <Button img={saveIcon}/>
+    </StyledForm>
   );
 };
 
-const SubmitButton = styled.button`
-  padding: 0;
-  margin: 5px;
-  font-size: 14px;
-  border: 1px solid black;
-  border-radius: 5px;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  color: #010140;
-  &:hover {
-    opacity: 0.5;
-  }
-`;
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`

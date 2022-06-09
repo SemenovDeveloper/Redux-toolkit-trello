@@ -92,7 +92,7 @@ export const Card: React.FC<CardPopupProps> = ({ card, column }) => {
                 onClick={() => setIsCardTitleEditible(!isCardTitleEditible)}
               ></Button>
             </NarrowFlexibleContainer>
-            <CloseButton onClick={() => setActivePopup(false)}></CloseButton>
+            <Button  img={closeIcon} onClick={() => setActivePopup(false)}></Button>
           </FlexContainer>
           <StyledText>
             in list <BoldText>{column.columnTitle}</BoldText> by{" "}
@@ -178,22 +178,6 @@ const DescText = styled.div`
   margin: 12px 6px;
   padding: 4px;
   word-wrap: break-word;
-`;
-
-const CloseButton = styled.button`
-  padding: 0;
-  margin: 5px;
-  background: center/80% url(${closeIcon}) no-repeat;
-  font-size: 14px;
-  border: 1px solid black;
-  border-radius: 5px;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  color: #010140;
-  &:hover {
-    opacity: 0.5;
-  }
 `;
 
 const CardTitle = styled.h3`
